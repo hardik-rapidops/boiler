@@ -1,0 +1,28 @@
+{
+  "name": "harsco",
+  "version": "1.0.0",
+  "dependencies": {
+    "angular": "1.6.7",
+    "angular-sanitize": "1.6.7",
+    "angular-animate": "1.6.7",
+    "angular-material": "1.1.4",
+    "angular-ui-router": "0.2.18",
+    "angular-material-icons": "0.7.1",
+    "text-encoding": "0.6.4",
+    "angular-material-sidenav": "0.0.14",
+    "font-awesome-bower": "4.7.0",
+    "angular-local-storage": "0.7.1",
+    "angular-recaptcha": "3.0.4",
+    "angular-nvd3": "1.0.9",
+    "moment-timezone": "0.5.13",
+    "angularjs-datepicker": "2.1.23",
+    "html2canvas": "0.4.1",
+    "pdfmake": "0.1.32",
+    "mdPickers": "0.7.5",
+    "ng-device-detector": "^5.1.4"
+  },
+  "resolutions": {
+    "angular": "1.6.7",
+    "angular-material": "1.1.4"
+  }
+}

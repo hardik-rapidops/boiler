@@ -1,0 +1,76 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content layout-padding class="md-content-bg notifications">
+    <div layout="column">
+        <div layout="row" class="box" layout-align="space-between center">
+            <div><strong>Email me</strong> at {{vmr.user.email}}</div>
+            <md-button class="md-icon-button" ng-click="vm.notifyEmail()">
+                <ng-md-icon icon="notifications_active" ng-if="vm.user.emailNotifications" style="fill:#ff6668" size="24"></ng-md-icon>
+                <ng-md-icon icon="notifications_off" ng-if="!vm.user.emailNotifications" style="fill:#a2a2a2" size="24"></ng-md-icon>
+            </md-button>
+        </div>
+        <div layout="row" layout-align="space-between center">
+            <div>Devices</div>
+            <md-button class="md-fab md-mini md-accent" ng-click="BoilerMain_Notifications($event)">
+                <ng-md-icon icon="delete" style="fill:#ffffff; padding-top: 0; line-height: 0;" size="24"></ng-md-icon>
+            </md-button>
+        </div>
+        <div layout="column" class="box" ng-repeat="notification in vm.notificationsdata track by $index" ng-if="vm.notificationsdata.length != 0">
+            <div layout="row" layout-align="space-between start">
+                <div layout="column">
+                    <div class="blue-text">
+                        <ng-md-icon icon="apple" ng-if="notification.deviceType == 'iOS'" style="fill:#808080" size="20"></ng-md-icon>
+                         <ng-md-icon icon="android" ng-if="notification.deviceType == 'Android'" style="fill:#a1c638" size="20"></ng-md-icon>
+                        {{notification.deviceName}}</div>
+                </div>
+                <div>
+                    <md-button class="md-icon-button" ng-click="vm.notificationStatus(notification)">
+                        <ng-md-icon icon="notifications_active" ng-if="notification.status == '1'" style="fill:#ff6668" size="24"></ng-md-icon>
+                        <ng-md-icon icon="notifications_off" ng-if="notification.status == '0'" style="fill:#a2a2a2" size="24"></ng-md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <md-checkbox ng-click="vm.notificationcheckboxclick(notification,$index)" ng-model="vm.notifications[$index]" aria-label="Checkbox 1" class="mb-0">
+                <label> <span class="sensor-temp">Last Modified:</span> <span class="sensor-value">{{notification.pretty_date}}</span></label>
+            </md-checkbox>
+        </div>
+        <div layout="row" class="box" layout-align="space-between center" ng-if="vm.notificationsdata.length == 0">
+            <div >You have no devices. Please download the app from the App Stores to add your iOS & Android devices to your account.</div>
+        </div>
+        <!-- <div layout="column" class="box">
+            <div layout="row" layout-align="space-between start">
+                <div layout="column">
+                    <div class="blue-text">
+                        <ng-md-icon icon="apple" style="fill:#808080" size="20"></ng-md-icon>
+                        iPad</div>
+                </div>
+                <div>
+                    <md-button class="md-icon-button">
+                        <ng-md-icon icon="notifications_off" style="fill:#a2a2a2" size="24"></ng-md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1" class="mb-0">
+                <label> <span class="sensor-temp">Last Modified:</span> <span class="sensor-value">2016-03-09</span></label>
+            </md-checkbox>
+        </div>
+        <div layout="column" class="box">
+            <div layout="row" layout-align="space-between start">
+                <div layout="column">
+                    <div class="blue-text">
+                        <ng-md-icon icon="android" style="fill:#a1c638" size="20"></ng-md-icon>
+                        Android</div>
+                </div>
+                <div>
+                    <md-button class="md-icon-button">
+                        <ng-md-icon icon="notifications_off" style="fill:#a2a2a2" size="24"></ng-md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1" class="mb-0">
+                <label> <span class="sensor-temp">Last Modified:</span> <span class="sensor-value">2016-03-09</span></label>
+            </md-checkbox>
+        </div> -->
+    </div>
+</md-content>

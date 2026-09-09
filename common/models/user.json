@@ -1,0 +1,242 @@
+{
+    "name": "user",
+    "replaceOnPUT": false,
+    "description": "Manages User info and related data.",
+    "base": "User",
+    "strict": false,
+    "idInjection": false,
+    "options": {
+        "validateUpsert": true
+    },
+    
+    "properties": {
+        "company": {
+            "type": "string"
+        },
+        "firstName": {
+            "type": "string"
+        },
+        "lastName": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string"
+        },
+        "emailNotifications": {
+            "type":"boolean",
+            "default":true
+        },
+        "passwordKey":{
+        "type": "string"
+        }
+    },
+    
+    "hidden": ["passwordKey"],
+    "validations": [],
+    "relations": {
+        "roles": {
+            "type": "hasMany",
+            "model": "Role",
+            "through": "RoleMapping",
+            "foreignKey": "principalId"
+        },
+        "sites": {
+            "type": "hasMany",
+            "model": "Site",
+            "foreignKey": "userId",
+            "through": "UserToSite"
+        },
+        "devices": {
+            "type": "hasMany",
+            "model": "Device",
+            "foreignKey": ""
+        }
+    },
+    "acls": [
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY",
+            "property": "deleteById"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "create"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "findById"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "pkAdmin",
+            "permission": "ALLOW",
+            "property": "find"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "pkTech",
+            "permission": "ALLOW",
+            "property": "find"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "pkAdmin",
+            "permission": "ALLOW",
+            "property": "deleteById"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "pkTech",
+            "permission": "ALLOW",
+            "property": "deleteById"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "upsertWithWhere"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "updateAttributes"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": "__unlink__users"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "forgotPassword"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "checkEmail"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "isUserExist"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "resendInvite"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "reset"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "updateAttributes"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "changePassword"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": "invite"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": "__create__devices"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": "__get__devices"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "__create__sites"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "__get__sites"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "__updateById__devices"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "__destroyById__devices"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "__findById__sites"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "__updateById__sites"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "pkAdmin",
+            "permission": "ALLOW",
+            "property": "__delete__roles"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "pkTech",
+            "permission": "ALLOW",
+            "property": "__delete__roles"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "deleteUserRole"
+        }
+    ],
+    "methods": {}
+}

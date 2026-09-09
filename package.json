@@ -1,0 +1,54 @@
+{
+  "name": "harsco",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node .",
+    "posttest": "npm run lint && nsp check"
+  },
+  "dependencies": {
+    "apn": "2.1.5",
+    "bluebird": "3.5.0",
+    "compression": "1.7.0",
+    "cors": "2.8.4",
+    "firebase-admin": "^13.4.0",
+    "forever": "^0.15.3",
+    "hat": "0.0.3",
+    "helmet": "3.8.1",
+    "loopback": "3.9.0",
+    "loopback-boot": "2.26.1",
+    "loopback-component-explorer": "4.2.0",
+    "loopback-component-push": "3.0.0",
+    "loopback-component-storage": "3.2.0",
+    "loopback-connector-mongodb": "^3.6.0",
+    "loopback-context": "3.3.0",
+    "loopback-softdelete": "^1.0.1",
+    "moment-timezone": "0.5.13",
+    "mongodb": "3.5.9",
+    "multiparty": "^4.2.2",
+    "node-gcm": "0.14.6",
+    "node-schedule": "1.2.5",
+    "nodemailer": "4.1.0",
+    "nodemailer-ses-transport": "1.5.1",
+    "request": "^2.88.2",
+    "serve-favicon": "2.4.4",
+    "strong-error-handler": "2.2.0"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "cordova": "^5.3.3",
+    "cordova-icon": "^1.0.0",
+    "cordova-splash": "^1.0.0",
+    "eslint": "4.7.2",
+    "eslint-config-loopback": "8.0.0",
+    "gulp": "^3.9.1",
+    "nsp": "2.8.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "harsco"
+}

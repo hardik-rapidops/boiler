@@ -1,0 +1,63 @@
+ <md-content flex >
+<div layout="column" flex>
+    <div id="login"  layout="column">
+        <div id="login-form-wrapper" layout="column" layout-align="center center">
+            <form>
+                <div id="login-form" class="md-whiteframe-8dp">
+                    <div class="logo"> <span> <img src="images/header1-logo.png" width="140"> </span> </div>
+                    <div class="smart-coach-bg"><strong>NURO CONNECT</strong></div>
+                    <div class="title" >Log in to your account</div>
+
+                    <md-input-container class="md-block" md-no-float>
+                    <label>Email</label>
+                        <input type="text" autocorrect="off" autocapitalize="off" ng-model="vm.user.email" ng-keydown=" vm.keyDown($event)" />
+                        <p class ="login-error">{{err1}}</p>
+                    </md-input-container>
+                    <md-input-container class="md-block" md-no-float>
+                    <label>Password</label>
+                        <input type="password" autocomplete="off" ng-model="vm.user.password" ng-keydown=" vm.keyDown($event)" />
+                        <p class ="login-error">{{err2}}</p>
+                    </md-input-container>
+                    <div  layout="row" layout-align="center center" ng-hide="vm.captchadisplay">
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha" data-sitekey="6LcV_cIUAAAAALoKpjjAqkqPo6lu7Og44cY39XJt" ng-click="vm.captchaClicked()"></div>
+                    </div>
+                    <p class ="login-error">{{err8}}</p>
+                    <noscript>
+                        <div>
+                            <div style="width: 302px; height: 422px; position: relative;">
+                                <div style="width: 302px; height: 422px; position: absolute;">
+                                    <iframe src="https://www.google.com/recaptcha/api/fallback?k=6LcV_cIUAAAAALoKpjjAqkqPo6lu7Og44cY39XJt"
+                                            frameborder="0" scrolling="no"
+                                            style="width: 302px; height:422px; border-style: none;">
+                                    </iframe>
+                                </div>
+                            </div>
+                            <div style="width: 300px; height: 60px; border-style: none;
+                                            bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px;
+                                            background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
+                                <textarea id="g-recaptcha-response" name="g-recaptcha-response"
+                                            class="g-recaptcha-response"
+                                            style="width: 250px; height: 40px; border: 1px solid #c1c1c1;
+                                                    margin: 10px 25px; padding: 0px; resize: none;" >
+                                </textarea>
+                            </div>
+                        </div>
+                    </noscript>
+                    <div class="remember-forgot-password" layout="row"
+                        layout-align="space-between center">
+                        <md-checkbox class="remember-me" ng-model="vm.rememberMe"> <span>Remember Me</span> </md-checkbox>
+                        <a class="forgot-password blue-color-text" ui-sref="forgot-password()">Forgot Password?</a> </div>
+                    <md-button type="submit" class="md-raised md-primary submit-button" ng-click="vm.login();"> LOG IN </md-button>
+                    <div class="register create-new-account" layout="row" layout-sm="row" layout-align="center center"> <span class="text" >Don't have an account?</span> <a ui-sref="register()">Create an account</a> </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</md-content>
+ <div class="parentDisable" ng-show="vm.spinner"></div>
+ <div layout="row" layout-sm="column" ng-show="vm.spinner" style="position: absolute;top: 50%;z-index: 999;left: 50%;" layout-align="space-around">
+     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+ </div>

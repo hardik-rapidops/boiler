@@ -1,0 +1,144 @@
+
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+    <header class="nav-header" ss-style-color="{'background-color': 'primary.default'}">
+        <a ui-sref="common.boilers()" class="logo">
+            <img src="images/nav-logo-connect.png">
+        </a>
+    </header>
+    <div layout="row" class="user-left">
+        <div class="avtar-image">
+            <ng-md-icon icon="person" style="fill: #767676" size="50"></ng-md-icon>
+        </div>
+        <div>
+            <div layout="column">
+                <p class="user-heading">{{vmr.user.firstName}} {{vmr.user.lastName}}</p>
+                <span class="user-industrial">{{vmr.user.company}}</span>
+            </div>
+        </div>
+    </div>
+    <md-content flex role="navigation" ss-style-color="{'background-color': 'accent.default'}">
+        <!-- <ss-sidenav flex menu="menu"></ss-sidenav> -->
+        <!--  <p>
+          This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
+        </p> -->
+        <ul id="side-menu" class="padding-0" >
+            <li class="drop-list-bg ">
+                <md-button class="md-raised md-accent" ng-class="{'active': vmr.state == 'common.boilers'}" ui-sref="common.boilers">
+                    <div layout="row" layout-align="center center">
+                        <div flex="85">
+                            <ng-md-icon icon="star" style="fill: #fff" size="20"></ng-md-icon>
+                            <span class="menu-title ml-10">Boilers</span></div>
+                        <div flex="15" layout="column" layout-align="center end">
+                            <ng-md-icon icon="keyboard_arrow_down" style="margin-top: 8px;" size="20"></ng-md-icon>
+                        </div>
+                    </div>
+                </md-button>
+                <ul class="padding-0">
+                    <li>
+                        <md-button class="md-raised  md-accent" ng-class="{'active': vmr.state == 'common.add-boiler'}" ui-sref="common.add-boiler">
+                            <span class="sub-link">Add a new boiler</span>
+                        </md-button>
+                    </li>
+                </ul>
+            </li>
+            <li hide show-gt-sm show-gt-md>
+                <md-button class="md-raised  md-accent" ng-click="trending();" ui-sref="common.trending" ng-class="{'active': vmr.state == 'common.trending'}">
+                    <ng-md-icon icon="trending_up" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Trending</span>
+                </md-button>
+            </li>
+            <li class="drop-list-bg ">
+                <md-button class="md-raised  md-accent" ui-sref="common.sites" ng-class="{'active': vmr.state == 'common.sites'}">
+                <div layout="row" layout-align="center center">
+                        <div flex="85">
+                    <ng-md-icon icon="location_on" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title ml-10">Sites</span></div>
+                    <div flex="15" layout="column" layout-align="center end">
+                    <ng-md-icon icon="keyboard_arrow_down" style=" margin-top: 8px;" size="20" class="float-right"></ng-md-icon>
+                    </div>
+                    </div>
+                </md-button>
+                <ul class="padding-0">
+                    <li>
+                        <md-button class="md-raised md-accent" ui-sref="common.add-sites" ng-class="{'active': vmr.state == 'common.add-sites'}">
+                            <span class="sub-link">Add a new site</span>
+                        </md-button>
+                    </li>
+                </ul>
+            </li>
+
+            <li ng-show="vmr.user.roles[0].name == 'pkAdmin'" hide show-gt-sm show-gt-md>
+                <md-button class="md-raised  md-accent" md-active-menu ui-sref="common.brand-settings" ng-class="{'active': vmr.state == 'common.settings' || vmr.state == 'common.brand-settings'}">
+                    <ng-md-icon icon="settings" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Settings</span>
+                </md-button>
+            </li>
+            <!-- <h3 style="color: white;">{{vmr.state}}</h3> -->
+
+            <!-- <li ng-show="vmr.user.roles[0].name == 'pkAdmin'" hide show-gt-sm show-gt-md>
+                <md-button class="md-raised  md-accent" md-active-menu ui-sref="common.settings" ng-class="{'active': vmr.state == 'common.settings'}">
+                    <ng-md-icon icon="settings" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Settings</span>
+                </md-button>
+            </li> -->
+            <!-- <li ng-show="vmr.user.roles[0].name == 'pkAdmin' || vmr.user.roles[0].name == 'pkTech'"  hide show-gt-sm show-gt-md>
+                <md-button class="md-raised  md-accent" md-active-menu ui-sref="common.admin-users" ng-class="{'active': vmr.state == 'common.admin-users'}">
+                    <ng-md-icon icon="people" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Users</span>
+                </md-button>
+            </li> -->
+            <li ng-show="vmr.user.roles[0].name == 'pkAdmin'"  hide show-gt-sm show-gt-md>
+                <md-button class="md-raised  md-accent" md-active-menu ui-sref="common.admin-users" ng-class="{'active': vmr.state == 'common.admin-users'}">
+                    <ng-md-icon icon="people" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Users</span>
+                </md-button>
+            </li>
+            <li>
+                <md-button class="md-raised  md-accent" ui-sref="common.notifications" ng-class="{'active': vmr.state == 'common.notifications'}">
+                    <ng-md-icon icon="notifications" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Notifications</span>
+                </md-button>
+            </li>
+            <li>
+                <md-button class="md-raised  md-accent" ui-sref="common.profile" ng-class="{'active': vmr.state == 'common.profile'}">
+                    <ng-md-icon icon="person" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">My Profile</span>
+                </md-button>
+            </li>
+            <li>
+                <md-button ng-click="help()" class="md-raised  md-accent" ui-sref="common.help" ng-class="{'active': vmr.state == 'common.help'}">
+                    <ng-md-icon icon="help" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Help</span>
+                </md-button>
+            </li>
+            <!-- <li>
+                <md-button ng-click="privacyPolicy()" class="md-raised  md-accent" ng-class="{'active': vmr.state == 'common.privacy'}">
+                    <ng-md-icon icon="insert_drive_file" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Privacy Policy</span>
+                </md-button>
+            </li> -->
+            <li>
+                <md-button ng-click="privacyPolicy()" class="md-raised  md-accent" ui-sref="common.privacy" ng-class="{'active': vmr.state == 'common.privacy'}">
+                    <ng-md-icon icon="insert_drive_file" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title">Privacy Policy</span>
+                </md-button>
+            </li>
+            <li>
+                <md-button class="md-raised  md-accent" ng-click="vmr.logout()">
+                    <ng-md-icon icon="logout" style="fill: #fff" size="20"></ng-md-icon>
+                    <span class="menu-title ml-10">Logout</span>
+                </md-button>
+            </li>
+        </ul>
+    </md-content>
+</md-sidenav>
+<div class="parentDisable" ng-show="vmr.spinner"></div>
+<div layout="row" layout-sm="column" ng-show="vmr.spinner" style="position: absolute;top: 50%;z-index: 999;left: 50%;" layout-align="space-around">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+<div layout="column" flex role="main">
+    <div ui-view layout="column" style="overflow: hidden;"></div>
+</div>
+<!-- <div>
+    <iframe ng-show="vm.help" src="http://docs.google.com/gview?url=MY_AWS_S3_URL&embedded=true"></iframe>
+</div> -->

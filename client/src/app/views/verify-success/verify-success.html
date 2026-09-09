@@ -1,0 +1,33 @@
+  <div layout="column" flex>
+      <div id="login" layout="column">
+  <div id="login-form-wrapper" layout="column" layout-align="center center">
+    <div id="login-form" class="md-whiteframe-8dp">
+      <div class="logo"> <span> <img src="images/header1-logo.png" width="140"> </span> </div>
+      <div class="smart-coach-bg"><strong>NURO CONNECT</strong></div>
+
+      <!--<form  ng-hide="verifysuccess">-->
+        <!--<md-input-container class="md-block mt-20" flex-gt-sm>-->
+            <!--<label>Email</label>-->
+            <!--<input type="text" ng-email ng-model="vm.user.email" ng-label="Email" ng-validate="email"-->
+                   <!--ng-need-->
+                   <!--submit-form>-->
+                   <!--<span >{{err1}}</span>-->
+        <!--</md-input-container>-->
+
+        <!--<md-button type="submit" ng-click="vm.verify()" class="md-raised md-primary submit-button"> Verify </md-button>-->
+      <!--</form>-->
+
+        <div ng-show="!vm.verifysuccess">
+            <h4>Something went wrong with this request.</h4>
+            <div class="login" layout="row" layout-align="center center"> <a ui-sref="register()">Register</a> </div>
+        </div>
+
+      <div ng-show="vm.verifysuccess">
+        <h4>Your email verification success</h4>
+        <div class="login" layout="row" layout-align="center center"> <a ui-sref="login()">Go to login</a> </div>
+      </div>
+        
+    </div>
+  </div>
+</div>
+</div>

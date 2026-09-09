@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget android-versionCode="20250823" defaultlocale="en-US" id="com.vensi.harscopk" ios-CFBundleVersion="19.01.25" version="1.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <dummy xmlns:android="http://schemas.android.com/apk/res/android" />
+    <feature name="Insomnia">
+        <param name="android-package" value="nl.xservices.plugins.Insomnia" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="FileTransfer">
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+    </feature>
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
+    </feature>
+    <feature name="SocialSharing">
+        <param name="android-package" value="nl.xservices.plugins.SocialSharing" />
+    </feature>
+    <feature name="FirebasePlugin">
+        <param name="android-package" value="org.apache.cordova.firebase.FirebasePlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <name>Nuro Connect</name>
+    <description>
+        This is a Bluetooth Application created by Vensi, Inc.
+    </description>
+    <author email="developer@vensi.com" href="http://www.vensi.com">
+        Vensi, Inc.
+    </author>
+    <content src="https://app.nuroconnect.com/android/index.html" />
+    <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <hook src="hooks/after_prepare/update-android-config.js" type="after_prepare" />
+    <config-file parent="/*" target="res/xml/config.xml">
+        <dummy xmlns:android="http://schemas.android.com/apk/res/android" />
+    </config-file>
+    <config-file parent="/*" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    </config-file>
+    <resource-file src="google-services.json" target="app/google-services.json" />
+    <allow-intent href="market:*" />
+    <icon density="ldpi" src="res/icon/android/ldpi.png" />
+    <icon density="mdpi" src="res/icon/android/mdpi.png" />
+    <icon density="hdpi" src="res/icon/android/hdpi.png" />
+    <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
+    <icon density="xxhdpi" src="res/icon/android/xxhdpi.png" />
+    <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png" />
+    <preference name="FIREBASE_MESSAGING_IMMEDIATE_PAYLOAD_DELIVERY" value="false" />
+    <preference name="loadUrlTimeoutValue" value="60000" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="FadeSplashScreen" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="backgroundColor" value="#000000" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageLength" value="0" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="unpaginated" />
+    <preference name="AllowInlineMediaPlayback" value="false" />
+    <preference name="BackupWebStorage" value="cloud" />
+    <preference name="DisallowOverscroll" value="false" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+    <preference name="MediaTypesRequiringUserActionForPlayback" value="audio, video" />
+    <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="SuppressesLongPressGesture" value="false" />
+    <preference name="Suppresses3DTouchGesture" value="false" />
+    <preference name="AndroidInsecureFileModeEnabled" value="true" />
+    <preference name="AndroidXEnabled" value="true" />
+    <preference name="android-minSdkVersion" value="23" />
+    <preference name="android-targetSdkVersion" value="34" />
+    <preference name="android-compileSdkVersion" value="34" />
+    <preference name="FirebasePluginAnalyticsEnabled" value="true" />
+    <preference name="FirebasePluginAutoInitEnabled" value="true" />
+    <preference name="FirebasePluginCrashlyticsEnabled" value="true" />
+    <preference name="FirebasePluginMessagingEnabled" value="true" />
+    <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+    <preference name="FirebaseAnalyticsCollectionEnabled" value="true" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/icon/android/xxxhdpi.png" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
+</widget>

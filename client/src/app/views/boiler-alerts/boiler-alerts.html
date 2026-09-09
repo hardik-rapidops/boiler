@@ -1,0 +1,168 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+
+<!--<md-toolbar>-->
+    <!--<div class="md-toolbar-tools">-->
+        <!--<md-button class="md-icon-button" aria-label="Menu Button" hide-gt-sm ng-click="boilerinfo();">-->
+            <!--<ng-md-icon icon="chevron_left" style="fill: ..." size="24"></ng-md-icon>-->
+        <!--</md-button>-->
+        <!--<h2>{{model.title}}</h2>-->
+        <!--<span flex></span>-->
+        <!--<md-menu-bar id="user-menu">-->
+            <!--<md-menu>-->
+                <!--<md-button class="user-button" ng-click="$mdOpenMenu()">-->
+                    <!--<div layout="row" layout-align="space-between center">-->
+                        <!--<div class="avatar-wrapper">-->
+                            <!--<img md-menu-align-target class="avatar" src="images/header-logo.png">-->
+                        <!--</div>-->
+                        <!--<div class="username" hide-xs>John Walker-->
+                            <!--<br>-->
+                            <!--<span>Group Name</span>-->
+                        <!--</div>-->
+                        <!--<ng-md-icon icon="keyboard_arrow_down" style="fill: #d5d5d5" class="hide-xs"></ng-md-icon>-->
+                    <!--</div>-->
+                <!--</md-button>-->
+                <!--<md-menu-content width="3">-->
+                    <!--<md-menu-item class="md-indent" ui-sref="app.pages_profile">-->
+                        <!--<md-button>-->
+                            <!--<ng-md-icon icon="person" style="fill: #858585" size="20"></ng-md-icon> My Profile</md-button>-->
+                    <!--</md-menu-item>-->
+                    <!--<md-menu-item class="md-indent" ui-sref="app.mail">-->
+                        <!--<md-button>-->
+                            <!--<ng-md-icon icon="logout" style="fill: #858585" size="20"></ng-md-icon> Logout</md-button>-->
+                    <!--</md-menu-item>-->
+                <!--</md-menu-content>-->
+            <!--</md-menu>-->
+        <!--</md-menu-bar>-->
+    <!--</div>-->
+<!--</md-toolbar>-->
+
+
+<md-content layout-padding class="md-content-bg">
+<div layout="row" flex="100">
+  <div layout="column" flex="45" flex-xs="100" class="boilers-alerts-bg">
+    <div layout="row" layout-align="space-between start" class="mb-10 ">
+             <strong class="pt-8">Boiler Alerts</strong>
+            <md-switch class="md-primary margin-0 " ng-model="vm.boiler.alertsDisabled" ng-change="vm.disableAll()"></md-switch>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row"  layout-align="space-between start">
+            <p class="font-14 pt-10" style="padding-top:15px;">Repeat Interval</p>
+              <div flex="50" class="pt-8">
+                <md-input-container class="md-block mt-10" flex-gt-sm>
+                    <label>Repeat</label>
+                    <md-select ng-disabled="vm.repeat" ng-model="vm.boiler.alertInterval"
+                               class="font-16 text-black">
+                        <md-option ng-value="option.id" ng-selected="{{vm.boiler.alertInterval == option.id? true : false}}"
+                                   ng-repeat="option in vm.repeatIntervals">{{option.intervaltitle }}
+                        </md-option>
+                    </md-select>
+          </md-input-container>
+              </div>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row"  layout-align="space-between start">
+            <p class="font-14">Alert on lockout error</p>
+            <md-checkbox class="mt-15" ng-model="vm.boiler.lockoutErrorAlert" ng-disabled="vm.lockout">
+              </md-checkbox>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row"  layout-align="space-between start">
+            <p class="font-14">Alert on hold error</p>
+            <md-checkbox class="mt-15" ng-model="vm.boiler.holdErrorAlert" ng-disabled="vm.hold">
+              </md-checkbox>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row"  layout-align="space-between start">
+            <p class="font-14">Alert on Alarm Relay Energized</p>
+            <md-checkbox class="mt-15" ng-model="vm.boiler.relayEnergizedAlert" ng-disabled="vm.relay">
+              </md-checkbox>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row"  layout-align="space-between start">
+            <p class="font-14">Alert on Over Temperature {{vm.tempunito}}</p>
+            <md-checkbox class="mt-15" ng-model="vm.boiler.alertonOverTempstatus" ng-change="vm.disable('O')" ng-disabled="vm.alertover">
+
+              </md-checkbox>
+          </div>
+          <md-divider></md-divider>
+          <div layout="row"  layout-align="space-between start" class="no-error-spacer" ng-repeat="overtemp in vm.overtemps" >
+              <div layout="column" flex="40">
+                  <md-input-container>
+                      <label>Temperature</label>
+                      <md-select ng-disabled="vm.too" ng-model="vm.tempAlertsovertypes[overtemp.id]"
+                                 class="font-16 text-black" ng-change="vm.checkoverbox(overtemp.id)">
+                          <md-option ng-value="option.id" ng-selected="{{vm.tempAlertsovertypes[overtemp.id] == option.id? true : false}}" ng-repeat="option in vm.temptypes">{{ option.temptype }}
+                          </md-option>
+
+                      </md-select>
+                  </md-input-container>
+              </div>
+              <div layout="column" flex="40">
+                  <md-input-container>
+                      <label>Temp is Over</label>
+                      <input type="text" ng-model="vm.alertOverTemp[overtemp.id]" float-only ng-disabled="vm.toto" ng-keypress="vm.isNumberKey_temp($event,'O')">
+                  </md-input-container>
+              </div>
+            <div layout="column">
+            <md-button class="md-icon-button mt-15" ng-click="vm.removeOverTemps(overtemp.id)" ng-disabled="vm.toro">
+              <ng-md-icon icon="delete" style="fill:#999999; margin: 4px 0px 0px 2px;" size="20"></ng-md-icon>
+            </md-button>
+            </div>
+          </div>
+      <div layout="row" layout-align="center center">
+      <p class="login-error">{{errorover}}</p>
+          </div>
+          <div layout="row">
+          <md-button class="md-fab md-primary md-hue-2 ml-0 admin-notify-add" aria-label="Profile" style="line-height: 0px;" ng-click="vm.addNewOverTemps()" ng-hide="vm.plusobutton">
+          <ng-md-icon icon="add" style="fill:#ffffff; margin: 4px 0px 0px 2px;" size="20"></ng-md-icon>
+        </md-button>
+          </div>
+      <div layout="row"  layout-align="space-between start">
+          <p class="font-14">Alert on Under Temperature{{vm.tempunitu}}</p>
+          <md-checkbox class="mt-15" ng-model="vm.boiler.alertonUnderTempstatus" ng-change="vm.disable('U')" ng-disabled="vm.alertover">
+          </md-checkbox>
+      </div>
+      <md-divider></md-divider>
+      <div layout="row"  layout-align="space-between start" class="no-error-spacer" ng-repeat="undertemp in vm.undertemps">
+          <div layout="column" flex="40">
+              <md-input-container>
+                  <label>Temperature</label>
+                  <md-select ng-disabled="vm.to" ng-model="vm.tempAlertsundertypes[undertemp.id]" class="font-16 text-black" ng-change="vm.checkunderbox(undertemp.id)">
+
+                      <md-option ng-value="option.id" ng-selected="{{vm.tempAlertsundertypes[undertemp.id] == option.id? true : false}}" ng-repeat="option in vm.temptypes">{{ option.temptype }}
+                      </md-option>
+
+
+                  </md-select>
+              </md-input-container>
+          </div>
+          <div layout="column" flex="40">
+              <md-input-container>
+                  <label>Temp is Under</label>
+                  <input type="text" ng-model="vm.alertUnderTemp[undertemp.id]" float-only ng-disabled="vm.tot" ng-keypress="vm.isNumberKey_temp($event,'U')">
+              </md-input-container>
+          </div>
+          <div layout="column">
+              <md-button class="md-icon-button mt-15" ng-click="vm.removeUnderTemps(undertemp.id)" ng-disabled="vm.tor">
+                  <ng-md-icon icon="delete" style="fill:#999999; margin: 4px 0px 0px 2px;" size="20"></ng-md-icon>
+              </md-button>
+          </div>
+      </div>
+      <div layout="row" layout-align="center center">
+          <p class="login-error">{{errorunder}}</p>
+      </div>
+      <div layout="row">
+          <md-button class="md-fab md-primary md-hue-2 ml-0 admin-notify-add" aria-label="Profile" style="line-height: 0px;" ng-click="vm.addNewUnderTemps()"  ng-hide="vm.plusbutton">
+              <ng-md-icon icon="add" style="fill:#ffffff; margin: 4px 0px 0px 2px;" size="20" ></ng-md-icon>
+          </md-button>
+      </div>
+      <div layout="row"  layout-align="end center">
+          <md-button class="md-raised md-primary" ng-disabled="vm.savbtn" ng-click="vm.save()">Save</md-button>
+      </div>
+  </div>
+
+
+</div>
+  </md-content>

@@ -1,0 +1,18 @@
+{
+  "Harsco": {
+    "connector": "loopback-connector-mongodb",
+    "name" : "Harsco",
+    "url" : "mongodb://localhost:27017/harscodev?replicaSet=rs0"
+  },
+  "Harsco-Records": {
+    "connector": "loopback-connector-mongodb",
+    "name" : "Harsco-Records",
+    "url" : "mongodb://localhost:27017/harscodev?replicaSet=rs0"
+  },
+  "s3files": {
+    "name": "s3files",
+    "connector": "loopback-component-storage",
+    "provider": "amazon",
+    "maxFileSize": "104857600"
+  }
+}

@@ -1,0 +1,64 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content class="md-content-bg">
+    <div layout="row" class="pl-10 pr-10">
+        <div flex="100" flex-xs="100" flex-sm="100" flex-md="100">
+            <md-input-container class="md-block mb-0" flex-gt-sm style="margin-bottom: -14px !important;">
+                <label>
+                    <ng-md-icon icon="search" style="fill: #999999" size="24"></ng-md-icon>
+                    Search</label>
+                <input ng-model="searchSites" input-clear="black">
+            </md-input-container>
+        </div>
+    </div>
+
+    <div layout="row" layout-wrap class="sites-list" ng-show="!searchSites || searchSites == ''">
+        <div flex="50" ng-repeat="site in vm.sites | filter:searchSites" flex-xs="100" class="p10">
+            <md-list-item ui-sref="common.site-info({siteId:site.id})">
+                <div layout="row" class="each-site" flex="100" layout-align="space-between center">
+                <div>
+                    <h3 class="sites-heading">{{site.name}}</h3>
+                    <p ng-if="site.description">Description: {{site.description}}</p>
+                    <p>
+                        <ng-md-icon icon="location_on" style="fill:#9f9f9f" size="20"></ng-md-icon>
+                        {{site.address}} {{site.city}} {{site.state}} {{site.zip}}
+                    </p>
+                    </div>
+                    <ng-md-icon icon="keyboard_arrow_right" style="fill: #d5d5d5; margin: 0px;"></ng-md-icon>
+                </div>
+                
+            </md-list-item>
+        </div>
+    </div>
+
+    <div layout="row" layout-wrap class="sites-list" ng-show="searchSites && searchSites != ''">
+        <div flex="50" ng-repeat="site in vm.allsites | filter:searchSites" flex-xs="100" class="p10">
+            <md-list-item ui-sref="common.site-info({siteId:site.id})">
+                <div layout="row" class="each-site" flex="100" layout-align="space-between center">
+                    <div>
+                        <h3 class="sites-heading">{{site.name}}</h3>
+                        <p ng-if="site.description">Description: {{site.description}}</p>
+                        <p>
+                            <ng-md-icon icon="location_on" style="fill:#9f9f9f" size="20"></ng-md-icon>
+                            {{site.address}} {{site.city}} {{site.state}} {{site.zip}}
+                        </p>
+                    </div>
+                    <ng-md-icon icon="keyboard_arrow_right" style="fill: #d5d5d5; margin: 0px;"></ng-md-icon>
+                </div>
+
+            </md-list-item>
+        </div>
+    </div>
+</md-content>
+<md-content class="md-content-bg">
+    <div layout="column" ng-show="vm.addsites" layout-align="center center">
+        <h4 class="sites-heading text-center font-weight">You have no sites. Would you like to <br>Add a site?</h4>
+        <div layout="row" class="text-center">
+            <md-button class="md-raised md-primary" ng-click="siteinfo()">Add a New Site</md-button>
+        </div>
+    </div>
+</md-content>
+<md-button class="md-fab btn-fix-bottom md-primary" ng-show="vm.add" ng-click="siteinfo();">
+    <ng-md-icon icon="add" style="fill:#fff"></ng-md-icon>
+</md-button>

@@ -1,0 +1,69 @@
+<ng-include src="'app/views/default.html'"></ng-include>
+<md-content class="p10">
+    <div layout="row" layout-align="end start" flex="100">
+        <div flex="85">
+            <md-input-container class="md-block mb-0" flex-gt-sm>
+                <label>
+                    <ng-md-icon icon="search" style="fill: #999999" size="24"></ng-md-icon>
+                    Search</label>
+                <input ng-model="searchText">
+            </md-input-container>
+        </div>
+        <div flex="15">
+            <md-button class="md-fab md-primary md-hue-2 admin-notify-delete" aria-label="Profile"
+                       ui-sref="common.add-admin-users" style="line-height: 0px;" >
+                <ng-md-icon icon="add" style="fill:#ffffff; margin: 8px 0px 0px 2px;" size="20" ></ng-md-icon>
+            </md-button>
+            <md-button class="md-fab md-primary md-hue-2 admin-notify-delete" aria-label="Profile"
+                       style="line-height: 0px;">
+                <ng-md-icon icon="delete" style="fill:#ffffff; margin: 4px 0px 0px 2px;" size="20" onclick="angular.element(this).scope().vm.deleteUser()"></ng-md-icon>
+            </md-button>
+        </div>
+    </div>
+    <div class="box" id="tranding">
+        <div layout="row" flex="100"></div>
+        <div>
+            <div layout="row" class="admin-main-table" flex="100">
+                <div layout="column" flex="10">
+                    <md-checkbox aria-label="Select All"
+                                 ng-checked="isChecked()"
+                                 md-indeterminate="isIndeterminate()"
+                                 ng-click="toggleAll()" class="mb-0">
+                    </md-checkbox>
+                </div>
+                <div layout="column" flex="20">
+                    First Name
+                </div>
+                <div layout="column" flex="20">
+                    Last Name
+                </div>
+                <div layout="column" flex="30">
+                    Email ID
+                </div>
+                <div layout="column" flex="20">
+                    Role
+                </div>
+
+            </div>
+            <div layout="row" class="p10" flex="100" ng-repeat="user in vm.users | filter:searchText"  ng-if="user.roles[0].name">
+                <div layout="column" flex="10" >
+                    <md-checkbox  ng-checked="exists(user, selected)" ng-click="toggle(user, selected)" aria-label="Checkbox 1" class="mb-0">
+                    </md-checkbox>
+                </div>
+                <div layout="column" flex="20">
+                    <span>{{user.firstName}}</span>
+                </div>
+                <div layout="column" flex="20">
+                    <span>{{user.lastName}}</span>
+                </div>
+                <div layout="column" flex="30">
+                    <span>{{user.email}}</span>
+                </div>
+                <div layout="column" flex="20">
+                    <span>{{user.roles[0].name}}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</md-content>

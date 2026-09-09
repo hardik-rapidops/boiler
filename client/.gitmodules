@@ -1,0 +1,4 @@
+[submodule "gatt-ip"]
+	path = gatt-ip
+	url = https://bitbucket.org/vensi/gatt-ip
+	branch = releases/1.7

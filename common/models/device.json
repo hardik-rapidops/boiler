@@ -1,0 +1,54 @@
+{
+  "name": "Device",
+  "replaceOnPUT": false,
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "forceId": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "required": true,
+      "defaultFn": "uuidv4"
+    },
+    "deviceName": {
+      "type": "string"
+    },
+    "deviceType": {
+      "type": "string"
+    },
+    "deviceToken": {
+      "type": "string"
+    },
+    "deviceUUID": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "updatedDate": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "createdDate": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "__get__user"
+    }
+  ],
+  "methods": {}
+}

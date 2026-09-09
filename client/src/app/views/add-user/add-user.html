@@ -1,0 +1,34 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+
+<md-content class="md-content-bg pt-18">
+    <div layout="row" layout-wrap>
+      <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Email</label>
+                <input type="text" ng-model="vm.email" ng-keydown="vm.keyDown($event)" ng-blur="vm.onEmailBlur()" />
+                <p class="font-14 p10" >(Enter multiple email addresses separated by comma(,))</p>
+                <p class ="login-error">{{err1}}</p>
+            </md-input-container>
+        </div>
+
+         <div flex="50" flex-xs="100" class="pl-10 pr-10  mb-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Role</label>
+                <md-select name="favoriteColor" ng-model="vm.role" ng-keydown=" vm.keyDown($event)">
+                    <md-option value="2" ng-selected="site.role == 2">User</md-option>
+                    <md-option value="1" ng-selected="site.role == 1">Supervisor</md-option>
+                    <md-option value="0" ng-selected="site.role == 0">Manager</md-option>
+                </md-select>
+                <p class ="login-error">{{err2}}</p>
+            </md-input-container>
+        </div>
+
+    </div>
+
+    <div layout="row" flex="100" layout-align="end center">
+        <md-button class="md-raised md-primary" ng-click="vm.invite()" ng-disabled="vm.emailStatusSuccess !== true">Invite</md-button>
+    </div>
+ 
+</md-content>

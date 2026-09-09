@@ -1,0 +1,33 @@
+{
+  "name": "Counties",
+  "replaceOnPUT": false,
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "waterheater": {
+      "type": "string"
+    },
+    "boiler": {
+      "type": "string"
+    },
+    "both": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "required": true
+    },
+    "county": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

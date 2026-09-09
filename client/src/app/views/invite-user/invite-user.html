@@ -1,0 +1,24 @@
+<div layout="column" flex>
+    <div id="login" layout="column">
+        <div id="login-form-wrapper" layout="column" layout-align="center center">
+            <div id="login-form" class="md-whiteframe-8dp">
+                <div class="logo"> <span> <img src="images/header1-logo.png" width="140"> </span> </div>
+                <div class="smart-coach-bg"><strong>NURO CONNECT</strong></div>
+                <div class="title">Resend Invitation</div>
+                <form>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Email</label>
+                        <input type="text" autocorrect="off" autocapitalize="off" ng-model="vm.email" ng-keydown=" vm.keyDown($event)">
+                        <p class ="login-error">{{err1}}</p>
+                    </md-input-container>
+                    <p class ="login-error">{{err2}}</p>
+                    <md-button type="submit" class="md-raised md-primary submit-button" ng-click="vm.submit();" ng-disabled="vm.enablesubmit"> Send Invitation </md-button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="parentDisable" ng-show="vm.spinner"></div>
+<div layout="row" layout-sm="column" ng-show="vm.spinner" style="position: absolute;top: 50%;z-index: 999;left: 50%;" layout-align="space-around">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>

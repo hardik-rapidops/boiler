@@ -1,0 +1,93 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content class="md-content-bg pt-18">
+    <div layout="row" layout-wrap>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Name</label>
+                <input type="text" ng-model="vm.site.name" ng-keydown=" vm.keyDown($event)">
+                <p class="login-error">{{error1}}</p>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Description</label>
+                <input type="text" ng-model="vm.site.description">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Address</label>
+                <input type="text" ng-model="vm.site.address">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>City</label>
+                <input type="text" ng-model="vm.site.city">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="50" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>State / Province</label>
+                <input type="text" ng-model="vm.site.state">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="50" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Zip</label>
+                <input type="text" maxlength="6"
+                       ng-keydown="vm.keyDown($event)" ng-model="vm.site.zip">
+                <p class="login-error">{{error2}}</p>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Fuel Cost (Price per therm)</label>
+                <input type="text" numbers-only-doller ng-keydown="vm.keyDown($event)"
+                       ng-model="vm.site.fuel" ng-start-with="$">
+                <p class="login-error">{{error3}}</p>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Time Zone </label>
+                <md-select ng-model="vm.site.timeZone" ng-model-options="{trackBy: '$value.id'}"
+                           class="font-16 text-black">
+                    <md-option ng-value="option" ng-repeat="option in vm.timeZone">{{ option.timezone }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <h4 class="blue-text">Notifications</h4>
+            <div class="select-box">
+                <div layout="row" class="each-select">
+                    <div flex="85" layout="column" layout-align="center start">
+                        <span class="font-14">Don't notify me on Boiler Alerts from this site</span>
+                    </div>
+                    <div flex="15" layout="column" layout-align="center end" class="blue-text">
+                        <md-switch class="md-primary" ng-model="vm.usersite.disableNotification" ng-true-value="true"
+                                   ng-false-value="false">
+                        </md-switch>
+                    </div>
+                </div>
+                <div layout="row" class="each-select">
+                    <div flex="85" layout="column" layout-align="center start">
+                        <span class="font-14">Don't notify anyone on Boiler Alerts from this site</span>
+                    </div>
+                    <div flex="15" layout="column" layout-align="center end" class="blue-text">
+                        <md-switch class="md-primary" ng-model="vm.site.disableNotification" ng-true-value="true"
+                                   ng-false-value="false">
+                        </md-switch>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="row" flex="100" layout-align="end center">
+            <md-button class="md-raised md-primary" ng-click="vm.save()">Save</md-button>
+            <!--<md-button class="md-raised md-accent" ng-click="users();">Access Control</md-button>-->
+        </div>
+    </div>
+</md-content>
+

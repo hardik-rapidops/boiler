@@ -1,0 +1,201 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content class="md-content-bg pt-18" id="tranding">
+    <div layout="row" layout-wrap flex="100">
+        <div layout="column" flex="25" flex-xs="100" flex-sm="35" flex-md="30" flex-gt-md="25" flex-gt-lg="20"
+             class="pl-10 pr-10">
+            <div layout="row">
+                <md-input-container class="md-block" flex>
+                    <label>Select Site</label>
+                    <md-autocomplete md-items="site in vm.getSites(vm.searchText)" md-selected-item-change="vm.updateSite()" md-item-text="site.name"
+                                     md-selected-item="vm.selectedSite" md-search-text="vm.searchText" md-clear-button="true" md-select-on-match="true"
+                                     md-min-length="0" md-require-match>
+                        <span md-highlight-text="vm.searchText">{{site.name}}</span>
+                    </md-autocomplete>
+                </md-input-container>
+            </div>
+            <div>
+                <div ng-repeat="boiler in vm.boilers track by $index">
+                    <button class="trending-accordion boilers-accord active" ng-accordian-toggle>
+                        {{boiler.name}}
+                    </button>
+                    <div class="panel pad show">
+                        <button class="trending-accordion active" ng-accordian-toggle>
+                            Temperature
+                        </button>
+                        <div class="panel p10 show">
+                            <div ng-repeat="line in boiler.graphLines | filter:{ group: 'temp' }">
+                                <div flex="100">
+                                    <md-checkbox ng-model="line.disabled" ng-change="vm.refreshGraph('temp')"
+                                                 ng-true-value="false" ng-false-value="true"><span
+                                            ng-attr-style="font-weight: bold;color:{{line.color}}">{{vm.dataPoints[line.name].label}}</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="trending-accordion active" ng-accordian-toggle>
+                            Current
+                        </button>
+                        <div class="panel p10 show">
+                            <div ng-repeat="line in boiler.graphLines | filter:{ group: 'current' }">
+                                <div flex="100">
+                                    <md-checkbox ng-model="line.disabled" ng-change="vm.refreshGraph('current')"
+                                                 ng-true-value="false" ng-false-value="true"><span
+                                            ng-attr-style="font-weight: bold;color:{{line.color}}">{{vm.dataPoints[line.name].label}}</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="trending-accordion active" ng-accordian-toggle>
+                            State & Status
+                        </button>
+                        <div class="panel p10 show">
+                            <div ng-repeat="line in boiler.graphLines | filter:{ group: 'state' }">
+                                <div flex="100">
+                                    <md-checkbox ng-model="line.disabled" ng-change="vm.refreshGraph('state')"
+                                                 ng-true-value="false" ng-false-value="true"><span
+                                            ng-attr-style="font-weight: bold;color:{{line.color}}">{{vm.dataPoints[line.name].label}}</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="trending-accordion active" ng-accordian-toggle>
+                            Relay
+                        </button>
+                        <div class="panel p10 show">
+                            <div ng-repeat="line in boiler.graphLines | filter:{ group: 'relay' }">
+                                <div flex="100" ng-hide="vm.dataPoints[line.name].options[line.bitIndex]==''">
+                                    <md-checkbox ng-model="line.disabled" ng-change="vm.refreshGraph('relay')"
+                                                 ng-true-value="false" ng-false-value="true"><span
+                                            ng-attr-style="font-weight: bold;color:{{line.color}}">{{vm.dataPoints[line.name].options[line.bitIndex]}}</span>
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <!--md-button class="md-fab btn-fix-bottom md-primary md-mini">
+                            <ng-md-icon icon="file_download" style="fill:#fff"></ng-md-icon>
+                        </md-button-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="column" flex="75" flex-xs="100" flex-sm="65" flex-md="70" flex-gt-md="75" flex-gt-lg="80"
+             class="p10">
+            <div layout="row" layout-wrap class="mb-10">
+                <div flex="70" flex-xs="100" layout="row">
+                    <div flex-gt-xs>
+                        <md-input-container class="md-block" flex-gt-sm style="margin: 0px 10px 0px 0px;">
+                            <label>Select Mode</label>
+                            <md-select ng-model="vm.range" ng-change="vm.setRange(vm.range)">
+                                <md-option ng-value="0" ng-selected="true">Hourly Mode</md-option>
+                                <md-option ng-value="1">Daily Mode</md-option>
+                                <md-option ng-value="2">Weekly Mode</md-option>
+                                <md-option ng-value="3">Monthly Mode</md-option>
+                                <md-option ng-value="4">Yearly Mode</md-option>
+                                <md-option ng-value="5">Custom</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div flex-gt-xs>
+                        <!--<md-input-container class="md-block" flex-gt-sm style="margin: 0px 10px 0px 0px;">-->
+                            <!--<label>Start Date</label>-->
+                            <!--<md-datepicker md-hide-icons="calendar" ng-model="vm.fromDate" md-open-on-focus-->
+                                           <!--md-min-date="ctrl.minDate" md-max-date="vm.today"></md-datepicker>-->
+                        <!--</md-input-container>-->
+                        <mdp-date-picker mdp-hide-icons="calendar" mdp-open-on-click name="dateFormat" mdp-placeholder="Start Date" mdp-min-date="'2016-01-01'" mdp-max-date="vm.today" mdp-format="MM/DD/YYYY" ng-model="vm.fromDate">
+                        </mdp-date-picker>
+                    </div>
+                    <div flex-gt-xs ng-show="vm.range==5">
+                        <!--<md-input-container class="md-block" flex-gt-sm style="margin: 0px 10px 0px 0px;">-->
+                            <!--<label>End Date</label>-->
+                            <!--<md-datepicker mdp-hide-icons="calendar" ng-model="vm.toDate" md-open-on-focus-->
+                                           <!--md-min-date="vm.fromDate" md-max-date="vm.today"></md-datepicker>-->
+                        <!--</md-input-container>-->
+                        <mdp-date-picker md-hide-icons="calendar" mdp-open-on-click required name="dateFormat" mdp-placeholder="End Date" mdp-min-date="vm.fromDate" mdp-max-date="vm.today" mdp-format="MM/DD/YYYY" ng-model="vm.toDate">
+                        </mdp-date-picker>
+                    </div>
+                    <div flex-gt-xs ng-show="vm.range==0">
+                        <mdp-time-picker mdp-auto-switch="true" mdp-placeholder="Time" mdp-format="hh:mm A" ng-model="vm.fromDate"></mdp-time-picker>
+                    </div>
+                    <div>
+                        <md-button ng-click="vm.changeRange(vm.range)" class="md-raised md-primary" style="margin-top: 0px; margin-right: 10px;">View</md-button>
+                        <span>:</span>
+                    </div>
+                </div>
+               <!--  <div flex="50" flex-xs="100" layout="row">
+                </div> -->
+                <div flex="30" flex-xs="100" layout="row"    layout-align="end start">
+                    <md-button class="md-fab md-mini md-accent" ng-click="vm.printDiv()" style="margin: 0px 10px 0px 0px;">
+                        <ng-md-icon icon="print" style="fill:#ffffff; padding-top: 0; line-height: 0;"
+                                    size="24"></ng-md-icon>
+                    </md-button>
+                    <md-button class="md-fab md-mini md-accent" ng-click="vm.downloadDiv($event)" style="margin: 0px 10px 0px 0px;">
+                        <ng-md-icon icon="file_download" style="fill:#ffffff; padding-top: 0; line-height: 0;"
+                                    size="24"></ng-md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <div layout="row" layout-wrap class="mb-10">
+                <div flex="100" flex-xs="100" layout="row" class ="login-error" ng-show="vm.err">
+                    End date should be greater than Start date
+                </div>
+            </div>
+            <div class="box" id="section-to-print">
+                <div id="temp" style="height:300px">
+                    <svg width="100%"></svg>
+                </div>
+                <div id="current" style="height:200px">
+                    <svg width="100%"></svg>
+                </div>
+                <div id="state" style="height:200px">
+                    <svg width="100%"></svg>
+                </div>
+                <div id="relay" style="height:100px">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box ">
+                <div layout="row" flex="100"></div>
+                <div class="Fuel-Usage">
+                    <div layout="row" class="list-heading" flex="100">
+                        <div layout="column" flex="20">
+                            Boiler Name
+                        </div>
+                        <div layout="column" flex="20">
+                            Burner Control <br/> Cycle Count
+                        </div>
+                        <div layout="column" flex="20">
+                            Burner Control <br/> Run Time
+                        </div>
+                        <div layout="column" flex="20">
+                            Fuel Usage
+                        </div>
+                        <div layout="column" flex="20">
+                            Total Fuel <br/>Cost
+                        </div>
+                    </div>
+                    <div layout="row" class="usage-list" flex="100" ng-repeat="(key,info) in vm.tabledata track by $index">
+                        <div layout="column" flex="20">
+                            <span>{{info.boilerName}}</span>
+                        </div>
+                        <div layout="column" flex="20">
+                            <span>{{info.burnercyclecount}}</span>
+                        </div>
+                        <div layout="column" flex="20">
+                            <span>{{info.burnerruntime}} hrs</span>
+                        </div>
+                        <div layout="column" flex="20">
+                            <span ng-if="info.fuelusage == '-- therms'"> -- therms</span>
+                            <span ng-if="info.fuelusage != '-- therms'">{{info.fuelusage | number : 2}} therms</span>
+                        </div>
+                        <div layout="column" flex="20">
+                            <span ng-if="info.totalfuelcost == '$-.---'">$-.--</span>
+                            <span ng-if="info.totalfuelcost != '$-.---'">${{info.totalfuelcost | number : 3}}  </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>

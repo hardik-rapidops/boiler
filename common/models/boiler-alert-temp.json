@@ -1,0 +1,32 @@
+{
+  "name": "BoilerAlertTemp",
+  "replaceOnPUT": false,
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "forceId": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "under": {
+      "type": "boolean",
+      "required": true,
+      "default":false
+    },
+    "tempType": {
+      "type": "string",
+      "required": true,
+      "default":"0"
+    },
+    "value": {
+      "type": "number",
+      "required": true,
+      "default":"0"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

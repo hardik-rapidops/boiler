@@ -1,0 +1,449 @@
+{
+    "_meta": {
+        "sources": [
+            "loopback/common/models",
+            "loopback/server/models",
+            "../common/models",
+            "./models"
+        ],
+        "mixins": [
+            "loopback/common/mixins",
+            "loopback/server/mixins",
+            "../node_modules/loopback-softdelete",
+            "../common/mixins",
+            "./mixins"
+        ]
+    },
+    "User": {
+        "dataSource": "Harsco",
+        "public": false
+    },
+    "AccessToken": {
+        "dataSource": "Harsco",
+        "public": false
+    },
+    "ACL": {
+        "dataSource": "Harsco",
+        "public": false
+    },
+    "RoleMapping": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true
+                }
+            }
+        }
+    },
+    "Role": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true
+                }
+            }
+        }
+    },
+    "Site": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find":true,
+                    "deleteById":true,
+                    "upsertWithWhere":true,
+                    "getSites": true
+                }
+            }
+        }
+    },
+    "Boiler": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "prototype$updateAttributes": true,
+                    "replaceOrCreate": true,
+                    "upsertWithWhere": true,
+                    "findById": true,
+                    "newBoiler": true,
+                    "exist": true,
+                    "deleteById":true,
+                    "records":true,
+                    "fuelUsage":true,
+                    "findUpdate":true
+                }
+            }
+        }
+    },
+    "ErrorCode": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true,
+                    "deleteMany": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    },
+    "ServiceRep": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "zip": true
+                }
+            }
+        }
+    },
+    "user": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "emailVerificationRequired": true,
+            "remoting": {
+                "sharedMethods": {
+                    "*": true,
+                    "create": true,
+                    "confirm": true,
+                    "login": true,
+                    "logout": true,
+                    "invite": true,
+                    "findById": true,
+                    "changePassword": true,
+                    "forgotPassword": true,
+                    "checkEmail" : true,
+                    "resendInvite" : true,
+                    "reset": true,
+                    "upsertWithWhere": true,
+                    "updateAttributes":true,
+                    "deleteUserRole":true,
+                    "isUserExist":true
+                }
+            }
+        }
+    },
+    "BoilerModel": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true,
+                    "deleteMany": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    },
+    "BoilerFile": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "create": true,
+                    "upload": true,
+                    "download": true,
+                    "deleteById": true
+                }
+            }
+        }
+    },
+    "DataPoint": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteById": true
+                }
+            }
+        }
+    },
+    "BoilerReadRecord": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "create": false,
+                    "delete": false,
+                    "update": false,
+                    "newRecord": true,
+                    "replace": true
+                }
+            }
+        }
+    },
+    "BoilerAlertTemp": {
+        "dataSource": "Harsco",
+        "public": false,
+        "$promise": {},
+        "$resolved": true
+    },
+    "BoilerWriteRecord": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "create": true
+                }
+            }
+        }
+    },
+    "UserToSite": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "replaceById": true,
+                    "findOrCreate": true,
+                    "unlinkAll":true,
+                    "replaceUser":true,
+                    "checkUserExist":true
+                }
+            }
+        }
+    },
+    "BoilerState": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true,
+                    "deleteMany": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    },
+    "BoilerStatus": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true,
+                    "deleteMany": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    },
+    "UserTitle": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true
+                }
+            }
+        }
+    },
+    "BoilerNotification": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "create": true,
+                    "find": true
+                }
+            }
+        }
+    },
+    "Device": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false
+                }
+            }
+        }
+    },
+    "S3FilesContainer": {
+        "dataSource": "s3files",
+        "public": false
+    },
+    "BoilerImage": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "view": true,
+                    "upload": true,
+                    "deleteById": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    },
+    "ZipCodes": {
+        "dataSource": "Harsco",
+        "public": false,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true
+                }
+            }
+        }
+    },
+    "Counties": {
+        "dataSource": "Harsco",
+        "public": false,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true
+                }
+            }
+        }
+    },
+    "Weather": {
+        "dataSource": "Harsco",
+        "public": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "zip": true
+                }
+            }
+        }
+    },
+    "RelayText": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true,
+                    "deleteMany": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    },
+    "ActiveModeDemand": {
+        "dataSource": "Harsco",
+        "public": true,
+        "$promise": {},
+        "$resolved": true,
+        "options": {
+            "remoting": {
+                "sharedMethods": {
+                    "*": false,
+                    "find": true,
+                    "create": true,
+                    "deleteAll": true,
+                    "deleteMany": true,
+                    "findByBrand": true
+                }
+            }
+        }
+    }
+}

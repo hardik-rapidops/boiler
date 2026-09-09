@@ -1,0 +1,39 @@
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <ng-back-button></ng-back-button>
+        <h2>{{vm.model.title}}</h2>
+        <span flex></span>
+        <div class="Admin-Head" ng-show="vmr.user.roles[0].name == 'pkAdmin'" hide show-gt-md>Admin</div>
+        <ng-header-icons layout="row" brandValue="{{vm.model.brand}}" ng-show="vm.model.brand == '0' || vm.model.brand == 0"></ng-header-icons>
+        <md-menu-bar id="user-menu">
+            <md-menu>
+                <md-button class="user-button button" ng-click="$mdOpenMenu()">
+                    <div layout="row" layout-align="space-between center" class="cursor" >
+                        <div class="avatar-wrapper">
+                            <img md-menu-align-target class="avatar" src="images/header1-logo.png">
+                        </div>
+                        <div class="username" hide-xs ng-show="vmr.user.roles[0].name != 'pkAdmin'">{{vmr.user.firstName}} {{vmr.user.lastName}}
+                            <br>
+                            <span>{{vmr.user.company}}</span>
+                        </div>
+                        <div class="username" hide-xs ng-show="vmr.user.roles[0].name == 'pkAdmin'">Admin</div>
+                        <ng-md-icon icon="keyboard_arrow_down" style="fill: #d5d5d5" class="hide-xs"></ng-md-icon>
+                    </div>
+                </md-button>
+                <md-menu-content width="3" class='md-whiteframe-2dp'>
+                    <md-menu-item ui-sref="common.profile">
+                        <md-button>
+                            <ng-md-icon icon="person" style="fill: #858585; margin: 0" size="20"></ng-md-icon>
+                            My Profile
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="vmr.logout()">
+                            <ng-md-icon icon="logout" style="fill: #858585; margin: 0" size="20"></ng-md-icon>
+                            Logout
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </div>

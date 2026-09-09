@@ -1,0 +1,403 @@
+<ng-include src="'app/views/default.html'"></ng-include>
+<md-content id="boilers" class="md-content-bg p10 admin-settings">
+    <h4 class="brand-title">{{(vm.brandType == "0"|| !vm.brandType) ? "Patterson-Kelley" : "Weil-McLain"}}</h4>
+    <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always">
+        <md-tab label="Boiler model">
+            <md-content class="md-padding md-content-bg">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="savebm" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadBM','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelbm" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label for="fileUploadBM" class="custom-file-upload" ng-hide="labelbm">
+                        File Upload
+                    </label>
+                    <input ng-hide="fupbm" type="file" ng-model="fileUploadBM" id="fileUploadBM" name="fileUploadBM"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadBM','T')">
+                </div>
+                <div layout="row" layout-wrap>
+                    <div flex="50" flex-xs="100" class="p10" ng-repeat="boilermodel in vm.boilermodels">
+                        <md-list-item class="md-3-line white-list-bg">
+                            <div class="sensor-img-bg" ng-if="boilermodel.imageFile!=''">
+                                <img ng-src="{{imageURLPath}}/api/BoilerImages/view/{{boilermodel.imageFile}}.png"
+                                     class="sensor-img">
+                            </div>
+                            <div class="sensor-img-bg" ng-if="boilermodel.imageFile==''">
+                                <img src="images/header1-logo.png" class="sensor-img-default">
+                            </div>
+                            <div class="md-list-item-text" layout="column">
+                                <h3 class="blue-text">{{boilermodel.name}} </h3>
+                                <p>Image File Name: <span class="value">{{boilermodel.imageFile}}</span></p>
+                                <p>Min Setpoint: <span class="value">{{boilermodel.minSetPoint}} F</span>Max : <span
+                                        class="value">{{boilermodel.maxSetPoint}} F</span>
+                                </p>
+
+                                <p>Min Fan speed: <span class="value">{{boilermodel.minFanSpeed}}  RPM</span>Max : <span
+                                        class="value">{{boilermodel.maxFanSpeed}} RPM</span></p>
+                            </div>
+                        </md-list-item>
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Boiler images">
+            <md-content class="md-padding md-content-bg">
+                <div layout="row">
+                    <div flex="20">
+                        <md-button class="md-fab md-mini md-accent">
+                            <ng-md-icon icon="delete" style="fill:#ffffff; padding-top: 0; line-height: 0;"
+                                        size="24" onclick="angular.element(this).scope().vm.deleteimage()"></ng-md-icon>
+                        </md-button>
+                    </div>
+                    <div flex="80" layout="row" layout-align="end start">
+                        <form enctype="multipart/form-data" onsubmit="angular.element(this).scope().vm.checkimg()"
+                              method="POST">
+                            <label for="uploadedfile" class="custom-file-upload-grey">
+                                Choose a file to upload
+                            </label>
+                            <input file-model="uploadedfile" ng-model="uploadedfile" id="uploadedfile"
+                                   name="uploadedfile" type="file" class="md-raised md-primary admin-file-upload"  onchange="angular.element(this).scope().vm.fileChoosen()"/>
+                            <input type="submit" value="Upload File" class="custom-file-upload"/>
+                        </form>
+                    </div>
+                </div>
+                <div layout="row" flex="100" layout-wrap class="boiler-imgs">
+                    <div class="image-box" layout="column" flex="20" flex-xs="100" flex-sm="33"
+                         ng-repeat="boilerimage in vm.boilerimages">
+                        <div class="each-img">
+                            <div class="img-bg">
+                                <md-checkbox ng-model="boilerimage.selected" value="{{boilerimage.name}}"
+                                             aria-label="Checkbox 1">
+                                </md-checkbox>
+                                <img ng-src="{{imageURLPath}}/api/BoilerImages/view/{{boilerimage.name}}">
+                            </div>
+                            <h4>{{boilerimage.name}}</h4>
+                        </div>
+                    </div>
+
+
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Error codes">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="saveec" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadEC','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelec" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label ng-hide="labelec" for="fileUploadEC" class="custom-file-upload">
+                        File Upload
+                    </label>
+                    <input ng-hide="fupec" type="file" ng-model="fileUploadEC" id="fileUploadEC" name="fileUploadEC"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadEC','T')">
+                </div>
+
+                <div class="box">
+                    <div layout="row" flex="100"></div>
+                    <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr class="admin-main-table">
+                                <td width="15%"> Error Number</td>
+                                <td width="35%">Error Name</td>
+                                <td width="50%">Description</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="errorcode in vm.errorcodes">
+                                <td>{{errorcode.errorKey}}</td>
+                                <td>{{errorcode.errorTitle}}</td>
+                                <td>{{errorcode.errorDescription}}</td>
+                            </tr>
+                            <tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="State codes">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="savesc" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadSC','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelsc" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label ng-hide="labelsc" for="fileUploadSC" class="custom-file-upload">
+                        File Upload
+                    </label>
+                    <input ng-hide="fupsc" type="file" ng-model="fileUploadSC" id="fileUploadSC" name="fileUploadSC"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadSC','T')">
+                </div>
+
+
+                <div class="box">
+                    <div layout="row" flex="100"></div>
+                    <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                            <thead>
+                            <tr class="admin-main-table">
+                                <td width="25%"> Number</td>
+                                <td width="75%">Name</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="statecode in vm.statecodes">
+                                <td>{{statecode.key}}</td>
+                                <td>{{statecode.text}}</td>
+                            </tr>
+                            <tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Status codes">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="savestc" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadSTC','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelstc" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label ng-hide="labelstc" for="fileUploadSTC" class="custom-file-upload">
+                        File Upload
+                    </label>
+                    <input ng-hide="fupstc" type="file" ng-model="fileUploadSTC" id="fileUploadSTC" name="fileUploadSTC"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadSTC','T')">
+                </div>
+
+                <div class="box">
+                    <div layout="row" flex="100"></div>
+                    <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                            <thead>
+                            <tr class="admin-main-table">
+                                <td width="25%"> Number</td>
+                                <td width="75%">Name</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="statuscode in vm.statuscodes">
+                                <td>{{statuscode.key}}</td>
+                                <td>{{statuscode.text}}</td>
+                            </tr>
+                            <tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="User title">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="saveut" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadUT','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelut" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label ng-hide="labelut" for="fileUploadUT" class="custom-file-upload">
+                        File Upload
+                    </label>
+                    <input ng-hide="fuput" type="file" ng-model="fileUploadEC" id="fileUploadUT" name="fileUploadUT"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadUT','T')">
+                </div>
+
+                <div class="box">
+                    <div layout="row" flex="100"></div>
+                    <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                            <thead>
+                            <tr class="admin-main-table">
+                                <td width="25%"> Number</td>
+                                <td width="75%">Title Name</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr  ng-repeat="usertitle in vm.usertitles">
+                                <td>{{usertitle.key}}</td>
+                                <td>{{usertitle.text}}</td>
+                            </tr>
+                            <tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+
+        <md-tab label="Service reps">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="center center">
+                    <div flex="30">
+                        <md-input-container class="md-block mb-0" flex-gt-sm>
+                            <label>
+                                <ng-md-icon icon="search" style="fill: #999999" size="24"></ng-md-icon>
+                                Search by zip</label>
+                            <input type="text" ng-model="searchText" maxlength="6" ng-keydown="vm.keyDown($event)">
+                        </md-input-container>
+                    </div>
+                    <div flex="10" layout-align="end start">
+                        <md-button class="md-raised md-primary"
+                                   onclick="angular.element(this).scope().vm.getServRep()">Search
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row"       layout-align="center center" flex="100">
+                    <div layout="column" flex="40" class="text-center service-rep-box" ng-hide="repcontactinfo">
+                    <h3>{{vm.servicereps.OfficeName}}</h3>
+<p ng-show="vm.servicereps.Address1">{{vm.servicereps.Address1}}<br>
+{{vm.servicereps.City}}, {{vm.servicereps.State}} {{vm.servicereps.ZipCode}}</p>
+<p>{{vm.servicereps.Contact}}</p>
+<p>Phone: {{vm.servicereps.Phone}}<br>
+<span ng-show="vm.servicereps.Fax">Fax: {{vm.servicereps.Fax}}</span><br>
+Email: {{vm.servicereps.Email}}</p>
+                    </div>
+                    <div  layout="column" flex="40" class="text-center service-rep-box" ng-hide="norepcontactinfo"><h4>No results were found for that zip code</h4></div>
+                </div>
+                <!-- <div class="box">
+                    <div>
+                        <div layout="row" class="admin-main-table" flex="100">
+
+                            <div layout="column" flex="20">
+                                Contact name
+                            </div>
+                            <div layout="column" flex="20">
+                                <span>Office</span>
+                            </div>
+                            <div layout="column" flex="15">
+                                Phone
+                            </div>
+                            <div layout="column" flex="20">
+                                Email
+                            </div>
+                            <div layout="column" flex="25">
+                                Address
+                            </div>
+
+
+                        </div>
+                        <div layout="row" class="p10" flex="100" >
+                            <div layout="column" flex="20">
+                                <span>{{vm.servicereps.contactname}}</span>
+                            </div>
+                            <div layout="column" flex="20">
+                                <span>{{vm.servicereps.officename}}</span>
+                            </div>
+                            <div layout="column" flex="15">
+                                <span>{{vm.servicereps.phone}}</span>
+                            </div>
+                            <div layout="column" flex="20">
+                                <span>{{vm.servicereps.email}}</span>
+                            </div>
+                            <div layout="column" flex="25">
+                                <span>{{vm.servicereps.address}}</span>
+                                <span>{{vm.servicereps.city}}, {{vm.servicereps.state}} {{vm.servicereps.zip}}</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div> -->
+            </md-content>
+        </md-tab>
+        <md-tab label="Relay text">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="savert" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadRT','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelrt" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label ng-hide="labelrt" for="fileUploadRT" class="custom-file-upload">
+                        File Upload
+                    </label>
+                    <input ng-hide="fuprt" type="file" ng-model="fileUploadRT" id="fileUploadRT" name="fileUploadRT"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadRT','T')">
+                </div>
+
+
+                <div class="box">
+                    <div layout="row" flex="100"></div>
+                    <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                            <thead>
+                            <tr class="admin-main-table">
+                                <td width="20%">Relay </td>
+                                <td width="20%"> Number</td>
+                                <td width="60%">Name</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="relaytext in vm.relaytexts">
+                                <td>{{relaytext.relay}}</td>
+                                <td>{{relaytext.key}}</td>
+                                <td>{{relaytext.text}}</td>
+                            </tr>
+                            <tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+        <md-tab label="Active Mode Demand">
+            <md-content class="md-padding">
+                <div layout="row" layout-align="end start">
+                    <md-button ng-hide="savead" class="md-raised md-primary"
+                               onclick="angular.element(this).scope().vm.Upload('fileUploadAD','P')">Save
+                    </md-button>
+                    <md-button ng-hide="cancelad" class="md-raised md-accent"
+                               onclick="angular.element(this).scope().vm.cancel()">Cancel
+                    </md-button>
+                    <label ng-hide="labelad" for="fileUploadAD" class="custom-file-upload">
+                        File Upload
+                    </label>
+                    <input ng-hide="fuprt" type="file" ng-model="fileUploadAD" id="fileUploadAD" name="fileUploadAD"
+                           class="md-raised md-primary admin-file-upload"
+                           onchange="angular.element(this).scope().vm.Upload('fileUploadAD','T')">
+                </div>
+
+
+                <div class="box">
+                    <div layout="row" flex="100"></div>
+                    <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                            <thead>
+                            <tr class="admin-main-table">
+                                <td width="25%"> Number</td>
+                                <td width="75%">Name</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="activemodedemand in vm.activemodedemands">
+                                <td>{{activemodedemand.key}}</td>
+                                <td>{{activemodedemand.text}}</td>
+                            </tr>
+                            <tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+</md-content>

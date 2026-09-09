@@ -1,0 +1,40 @@
+{
+  "name": "nuroconnect-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright TypeScript POM framework foundation for NuroConnect automation.",
+  "scripts": {
+    "test": "npm run test:flow",
+    "test:dev": "npm run test:flow:dev",
+    "test:prod": "npm run test:flow:prod",
+    "test:flow": "cross-env TEST_ENV=dev node scripts/run-ordered-flow.js",
+    "test:flow:dev": "cross-env TEST_ENV=dev node scripts/run-ordered-flow.js",
+    "test:flow:prod": "cross-env TEST_ENV=prod node scripts/run-ordered-flow.js",
+    "test:site:creation": "cross-env TEST_ENV=dev playwright test --project=site-creation --no-deps",
+    "test:site:invitation": "cross-env TEST_ENV=dev playwright test --project=site-invitation --no-deps",
+    "test:boiler:creation": "cross-env TEST_ENV=dev playwright test --project=boiler-creation --no-deps",
+    "test:boiler:info": "cross-env TEST_ENV=dev playwright test --project=boiler-info --no-deps",
+    "test:site:search": "cross-env TEST_ENV=dev playwright test --project=site-search --no-deps",
+    "test:site:update": "cross-env TEST_ENV=dev playwright test --project=site-update --no-deps",
+    "test:site:unassignment": "cross-env TEST_ENV=dev playwright test --project=site-unassignment --no-deps",
+    "export:settings:dev": "cross-env TEST_ENV=dev node scripts/export-settings-data.js",
+    "export:settings:weil-mclain:dev": "cross-env TEST_ENV=dev SETTINGS_INDEX=1 SETTINGS_EXPORT_NAME=Weil-McLain node scripts/export-settings-data.js",
+    "export:boiler-settings:dev": "cross-env TEST_ENV=dev EXPORT_COMBINED_BOILER_SETTINGS=true node scripts/export-settings-data.js",
+    "export:settings:prod": "cross-env TEST_ENV=prod node scripts/export-settings-data.js",
+    "report": "playwright show-report reports/html",
+    "report:allure": "npm run report:allure:generate && npm run report:allure:open",
+    "report:allure:generate": "node scripts/prepare-allure-results.js && allure generate reports/allure-results --clean -o reports/allure-report",
+    "report:allure:open": "allure open reports/allure-report --port 5050",
+    "report:allure:serve": "allure serve reports/allure-results --port 5050",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^25.9.3",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.6.1",
+    "typescript": "^5.7.3"
+  }
+}

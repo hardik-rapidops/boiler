@@ -1,0 +1,48 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content class="md-content-bg">
+    <div layout="row" layout-wrap class="users-list">
+        <div flex="50" flex-xs="100" class="p10" ng-repeat="site in vm.usersites track by $index">
+            <div class="each-user">
+                <div layout="row" layout-align="space-between start">
+                    <div layout="column">
+                        <h3 class="blue-text">{{site.user.firstName}} {{site.user.lastName}}</h3>
+                        <div class="company">{{site.user.company}}</div>
+                    </div>
+                    <div layout="column">
+                        <md-button ng-show="(vm.manager == true && site.role != 0) || (vm.manager == true && site.role == 0 && vm.managerscount > 1)" class="md-icon-button" ng-click="vm.delete($event,site)">
+                            <md-icon>
+                                <ng-md-icon icon="delete" style="fill:#a7a7a7" size="20"></ng-md-icon>
+                            </md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div class="pt-8">
+                    <ng-md-icon icon="email" style="fill:#a7a7a7" size="20"></ng-md-icon> {{site.user.email}}</div>
+                <div layout="row" flex-xs="100" layout-wrap>
+                    <div layout="row"  flex="60" layout-align="start center">
+                        <div ng-show="site.user.phone">
+                            <ng-md-icon icon="phone" style="fill:#a7a7a7" size="20"></ng-md-icon>
+                        </div>
+                        {{site.user.phone}}
+                    </div>
+                    <div flex="40">
+                    <label style="color: rgba(0,0,0,0.54); font-size: 13px; margin-bottom: -6px;  display: block; padding-left: 3px;">Role</label>
+                        <md-input-container class="md-block margin-0" flex-gt-sm>
+                            
+                            <md-select ng-model="vm.role[$index]" ng-disabled="vm.manager == false || (site.role == 0 && vm.managerscount == 1)" ng-change="vm.update(site,$index)">
+                                <md-option value="2" >User</md-option>
+                                <md-option value="1" >Supervisor</md-option>
+                                <md-option value="0" >Manager</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>
+<md-button ng-show="vm.manager == true" class="md-fab btn-fix-bottom md-primary" ui-sref="common.add-user({'siteId':vm.siteId})">
+    <ng-md-icon icon="add" style="fill:#fff"></ng-md-icon>
+</md-button>

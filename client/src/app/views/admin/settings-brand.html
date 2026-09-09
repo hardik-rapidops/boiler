@@ -1,0 +1,14 @@
+<ng-include src="'app/views/default.html'"></ng-include>
+<md-content id="boilers" class="md-content-bg p10 admin-settings">
+    <h4 class="select-brand">Select brand</h4>
+    <div>
+        <md-button ng-hide="savebm" class="md-raised md-primary brand-button" ng-click="vm.goToSettings('0')">Patterson-Kelley</md-button>
+    </div>
+    
+    <div>
+        <md-button ng-hide="savebm" class="md-raised md-primary brand-button" ng-click="vm.goToSettings('1')">Weil-McLain</md-button>
+    </div>
+    <!-- <div>
+        <md-button ng-hide="savebm" class="md-raised md-primary brand-button" ng-click="vm.goToSettings()">Legacy</md-button>
+    </div> -->
+</md-content>

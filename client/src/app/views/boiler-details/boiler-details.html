@@ -1,0 +1,572 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content class="md-content-bg boilers-main" keep-alive destroy-fn="destroy()">
+    <div layout="row" flex="100" layout-wrap>
+        <div layout="column" flex="33" flex-xs="100" flex-sm="50" flex-md="50" class="p10">
+            <md-list-item class="box pt-0 pb-0" ng-class="{'hpk-disconnected': !vm.isBoilerConnected}">
+                <div layout="row" layout-wrap flex="100">
+                    <div flex="25" layout="column" layout-align="center center"
+                         ng-if="(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].imageFile!=''">
+                        <img
+                            ng-src="{{imageURLPath}}/api/BoilerImages/view/{{(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].imageFile}}.png"
+                            width="70">
+                    </div>
+                    <div flex="25" layout="column" layout-align="center center"
+                         ng-if="(vm.boilerModels | filter:{modelKey:vm.boiler.model, brand: boiler.brand}:true)[0].imageFile==''">
+                        <img ng-src="images/header1-logo.png" class="sensor-img-default">
+                    </div>
+                    <div layout="column" flex="75">
+                        <div layout="row" layout-align="space-between center">
+                            <h3 class="blue-text">{{vm.model.title}}</h3>
+                            <div>
+                                <md-button class="md-icon-button"
+                                           ui-sref="common.boiler-info({'boilerId': vm.boilerId})" style="    width: 30px; height: 36px;">
+                                    <ng-md-icon icon="info_outline" style="fill: #b7b7b7" size="24"></ng-md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                        <div layout="column" class="boilers-data">
+                            <div><span class="value-heading">Model :</span> <span class="value">{{(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].name}}-({{vm.boiler.description}}) </span>
+                            </div>
+                            <div><span class="value-heading">Site :</span> <span class="value">{{vm.site.name}} ({{vm.site.description}})</span>
+                            </div>
+                        </div>
+                        <div layout="row" class="boilers-data">
+                            <span class="value-heading">Mode :</span> <span class="value">{{vm.boilerModes[vm.boiler.cascade]}}</span>
+                        </div>
+                        <div layout="row" class="boilers-data">
+                            <div ng-hide="vm.isBoilerConnected">
+                                <span class="value-heading">State :</span> <span class="value">{{vm.stateLoad}}</span>
+                            </div>
+                            <div ng-show="vm.isBoilerConnected">
+                                <span class="value-heading">State :</span> <span class="value">{{vm.boilerStates[vm.boilerRecord.data.state].text}}</span>
+                                <!-- <span class="value-heading">State :</span> <span class="value">{{vm.getState(vm.boilerRecord.data.state)}}</span> -->
+                            </div>
+                        </div>
+                        <div layout="row" class="boilers-data">
+                            <span class="value-heading">Status :</span> <span class="value">{{vm.boilerStatuses[vm.boilerRecord.data.status].text}}</span>
+                            <!-- <span class="value-heading">Status :</span> <span class="value">{{vm.getStatus(vm.boilerRecord.data.status)}}</span> -->
+                        </div>
+                        <div layout="row" class="boilers-data">
+                            <span class="value-heading">Brand :</span> <span class="value">{{vm.brand}}</span>
+                        </div>
+                        <div layout="row" layout-align="space-between center">
+                            <div class="boilers-data" style="margin-top: -17px; overflow: hidden;    white-space: nowrap;"><span class="value-heading">Updated :</span>
+                                <span class="value">{{vm.lastupdated}}</span></div>
+                            <div ng-hide="vm.isBoilerConnected" style="    width: 30px; height: 36px;"></div>
+                            <div ng-hide="(vm.downloadInterval || !vm.isBoilerConnected)">
+                                <md-button class="md-icon-button" ng-click="vm.download($event)" style="    width: 30px; height: 36px;">
+                                    <ng-md-icon icon="file_download" style="fill: #b7b7b7" size="24"></ng-md-icon>
+                                </md-button>
+                            </div>
+                            <div ng-show="(vm.downloadInterval && vm.isBoilerConnected)">
+                                <md-progress-circular md-diameter="24px" md-mode="indeterminate"></md-progress-circular>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-list-item>
+            <div layout="row" layout-align="center center" ng-show="(vm.boilerRecord.data.errortype == 1 && vm.isBoilerConnected)"
+                 class="error-box error-red" style="cursor: pointer" ng-click="vm.errordetails($event)" >
+                Error Code {{vm.boilerRecord.data.errorcode}}:
+                {{(vm.boilerErrors | filter:{errorKey:""+vm.boilerRecord.data.errorcode}:true)[0].errorTitle}}
+            </div>
+            <div layout="row" layout-align="center center" ng-show="(vm.boilerRecord.data.errortype > 1 && vm.isBoilerConnected)"
+                 class="error-box error-yellow" style="cursor: pointer" ng-click="vm.errordetails($event)">
+                Error Code {{vm.boilerRecord.data.errorcode}}:
+                {{(vm.boilerErrors | filter:{errorKey:""+vm.boilerRecord.data.errorcode}:true)[0].errorTitle}}
+            </div>
+            <div class="box">
+                <button class="boiler-values-accordion active">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Firing Rate</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.firerate}}
+                            {{vm.boilerRecord.units.firerate}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel FiringRate-slider show">
+                    <md-slider-container>
+                        <div class="white-over"></div>
+                        <span style="    position: absolute;    padding-top: 72px;">0</span>
+
+                        <md-slider flex min="0" max="100" ng-model="vm.boilerRecord.data.firerate" aria-label="red"
+                                   id="red-slider">
+                        </md-slider>
+                        <span style="position: absolute; padding-top: 76px; right: 3px;">100</span>
+                    </md-slider-container>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level == 2">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('fan')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Fan Speed</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.fan}} {{vm.boilerRecord.units.fan}}</div>
+                    </div>
+                </button>
+                <div class="panel" id="fan">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('chsetpoint')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">CH Setpoint</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.chsetpoint}}
+                            {{vm.boilerRecord.units.chsetpoint}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="chsetpoint">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('dhwsetpoint')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">DHW Setpoint</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.dhwsetpoint}}
+                            {{vm.boilerRecord.units.dhwsetpoint}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="dhwsetpoint">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('dhwtanksetpoint')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">DHW Tank Setpoint</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.dhwtanksetpoint}}
+                            {{vm.boilerRecord.units.dhwtanksetpoint}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="dhwtanksetpoint">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level >= 1">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('supply')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Outlet Temperature</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.supply}} {{vm.boilerRecord.units.supply}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="supply">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level >= 1">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('return')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Inlet Temperature</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.return}} {{vm.boilerRecord.units.return}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="return">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level >= 1">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('stack')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Exhaust Temperature</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.stack}} {{vm.boilerRecord.units.stack}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="stack">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level >= 1">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('dhw')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">{{vm.boiler.dhwsensormode ? 'DHW Thermostat' : 'DHW Temperature'}}</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.dhw}} {{vm.boilerRecord.units.dhw}}</div>
+                    </div>
+                </button>
+                <div class="panel" id="dhw">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level >= 1">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('header')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Header Temperature</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.header}} {{vm.boilerRecord.units.header}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="header">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level >= 1">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('hx')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips">Heat Exchanger Temperature</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.hx}} {{vm.boilerRecord.units.hx}}</div>
+                    </div>
+                </button>
+                <div class="panel" id="hx">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('oda')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Outdoor Air Temperature</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.oda}} {{vm.boilerRecord.units.oda}}</div>
+                    </div>
+                </button>
+                <div class="panel" id="oda">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+        </div>
+        <div layout="column" flex="33" ng-if="vm.level >= 1" flex-xs="100" flex-sm="50" flex-md="50" class="p10">
+            <div class="unselect-box">
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>{{vm.relayA}}</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[15] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>{{vm.relayB}}</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[14] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>{{vm.relayC}}</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[13] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>{{vm.relayD}}</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[12] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>External Ignition</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[11] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Gas Valve</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[10] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Alarm Relay</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[8] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Interlock Control Circuit</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[7] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Damper End Switch</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[6] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Limit Control Circuit</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[5] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Enable</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[2] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Night Setback</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[1] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Safety Relay</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.digitalio[0] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Air Switch</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[7] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Start Interlock 1</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[6] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Start Interlock 2</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[5] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Aux Input 1</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[4] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>High Temp Limit</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[3] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Low Water Cut-off</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[2] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>High Gas Pressure</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[1] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>{{vm.boiler.flowswitch ? 'Flow Switch' : 'Aux Input 2'}}</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="round-bt">
+                        <md-button class="md-fab md-mini" ng-class="{'active':vm.annunciator[0] == 1}" ng-disabled="true">
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="column" flex="33" flex-xs="100" flex-sm="50" flex-md="50" class="p10">
+            <div class="box" ng-show="vm.level == 2">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('analogin')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Analog Input</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.analogin}}
+                            {{vm.boilerRecord.units.analogin}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="analogin">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level == 2">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('analogout')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Analog Output</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.analogout}}
+                            {{vm.boilerRecord.units.analogout}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="analogout">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="box" ng-show="vm.level == 2">
+                <button class="boiler-values-accordion" ng-click="vm.showGraph('flame')">
+                    <div layout="row" layout-align="space-between center">
+                        <div class="text-ellips ">Flame Signal</div>
+                        <div class="value blue-text">{{vm.boilerRecord.data.flame}} {{vm.boilerRecord.units.flame}}
+                        </div>
+                    </div>
+                </button>
+                <div class="panel" id="flame">
+                    <svg width="100%"></svg>
+                </div>
+            </div>
+            <div class="unselect-box">
+                <div layout="row" class="each-select" ng-show="vm.level == 2">
+                    <div flex="70" layout="column" layout-align="center start">
+                        <span>Active Mode Demand</span>
+                    </div>
+                    <div flex="30" layout="column" layout-align="center end" class="blue-text">
+                        {{vm.boilerRecord.data.activedemand}}
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="70" layout="column" layout-align="center start">
+                        <span>Burner Control Cycle Count</span>
+                    </div>
+                    <div flex="30" layout="column" layout-align="center end" class="blue-text">
+                        {{vm.boilerRecord.data.cycles}} {{vm.boilerRecord.units.cycles}}
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ng-show="vm.level >= 1">
+                    <div flex="70" layout="column" layout-align="center start">
+                        <span>Burner Control Run Time</span>
+                    </div>
+                    <div flex="30" layout="column" layout-align="center end" class="blue-text">
+                        {{vm.boilerRecord.data.runtime}} {{vm.boilerRecord.units.runtime}}
+                    </div>
+                </div>
+            </div>
+            <div ng-show="vm.boiler.securitymode>0">
+                <form name="editForm">
+                    <div class="select-box">
+                        <div layout="row" class="each-select">
+                            <div flex="90" layout="column" layout-align="center start">
+                                <span>CH Boiler Control</span>
+                            </div>
+                            <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                                <md-switch class="md-primary" ng-model="vm.boilerRecord.writeableData.chcontrol" ng-true-value="1" ng-false-value="0">
+                                </md-switch>
+                            </div>
+                        </div>
+                        <div class="p10" ng-show="vm.boiler.chsetpointwrite">CH Setpoint
+                            <div style="font-size: 12px; padding-top: 8px;">Temperature:
+                            </div>
+                            <md-slider-container>
+                                <md-slider flex ng-model="vm.boilerRecord.writeableData.chsetpoint" value="vm.boilerRecord.writeableData.chsetpoint"
+                                           min="{{vm.getSetPointByTemp(vm.boilerModels[vm.boiler.model].minSetPoint)}}"
+                                           max="{{vm.getSetPointByTemp(vm.boilerModels[vm.boiler.model].maxSetPoint)}}" aria-label="blue"
+                                           id="blue-slider" class="md-primary" step="0.1">
+                                </md-slider>
+                                <div class="value-input">
+                                    {{vm.boilerRecord.writeableData.chsetpoint}} {{vm.boilerRecord.units.chsetpoint}}
+                                </div>
+                            </md-slider-container>
+                        </div>
+                    </div>
+                    <div class="select-box">
+                        <div layout="row" class="each-select">
+                            <div flex="85" layout="column" layout-align="center start">
+                                <span>DHW Boiler Control </span>
+                            </div>
+                            <div flex="15" layout="column" layout-align="center end" class="blue-text">
+                                <md-switch class="md-primary" ng-model="vm.boilerRecord.writeableData.dhwcontrol" ng-true-value="1" ng-false-value="0">
+                                </md-switch>
+                            </div>
+                        </div>
+                        <div class="p10" ng-show="vm.boiler.dhwsetpointwrite">DHW Setpoint
+                            <div style="font-size: 12px; padding-top: 8px;">Temperature:
+                            </div>
+                            <md-slider-container>
+                                <md-slider flex min="{{vm.getSetPointByTemp(vm.boilerModels[vm.boiler.model].minSetPoint)}}"
+                                           max="{{vm.getSetPointByTemp(vm.boilerModels[vm.boiler.model].maxSetPoint)}}"
+                                           ng-model="vm.boilerRecord.writeableData.dhwsetpoint" value="vm.boilerRecord.writeableData.dhwsetpoint" aria-label="blue"
+                                           id="blue-slider" class="md-primary">
+                                </md-slider>
+                                <div class="value-input">
+                                    {{vm.boilerRecord.writeableData.dhwsetpoint}} {{vm.boilerRecord.units.dhwsetpoint}}
+                                </div>
+                                <!--<md-input-container>-->
+                                <!--<input flex type="number" ng-model="vm.boilerRecord.data.dhwsetpoint" aria-label="blue" aria-controls="blue-slider">-->
+                                <!--</md-input-container>-->
+                            </md-slider-container>
+                        </div>
+                        <div class="p10" ng-show="vm.boiler.dhwtanksetpointwrite">DHW Tank Setpoint
+                            <div style="font-size: 12px; padding-top: 8px;">Temperature:
+                            </div>
+                            <md-slider-container>
+                                <md-slider flex min="{{vm.getSetPointByTemp(vm.boilerModels[vm.boiler.model].minSetPoint)}}"
+                                           max="{{vm.getSetPointByTemp(vm.boilerModels[vm.boiler.model].maxSetPoint)}}"
+                                           ng-model="vm.boilerRecord.writeableData.dhwtanksetpoint" value="vm.boilerRecord.writeableData.dhwtanksetpoint"
+                                           aria-label="blue" id="blue-slider" class="md-primary" >
+                                </md-slider>
+                                <div class="value-input">
+                                    {{vm.boilerRecord.writeableData.dhwtanksetpoint}}
+                                    {{vm.boilerRecord.units.dhwtanksetpoint}}
+                                </div>
+                                <!--<md-input-container>-->
+                                <!--<input flex type="number" ng-model="vm.boilerRecord.data.dhwtanksetpoint" aria-label="blue" aria-controls="blue-slider">-->
+                                <!--</md-input-container>-->
+                            </md-slider-container>
+                        </div>
+                    </div>
+                </form>
+                <div layout="row" layout-align="end center" ng-show="editForm.$dirty">
+                    <md-button ng-click="vm.cancel($event)" class="md-raised md-secondary">CANCEL</md-button>
+                    <md-button ng-click="vm.save($event)" class="md-raised md-primary">SAVE</md-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>

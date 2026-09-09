@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "254911212439",
+    "firebase_url": "https://harsco-bd9c2.firebaseio.com",
+    "project_id": "harsco-bd9c2",
+    "storage_bucket": "harsco-bd9c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254911212439:android:b1b13cef9351b119ae32d2",
+        "android_client_info": {
+          "package_name": "com.vensi.harsco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254911212439-0k6rgofni3qbb8rcib73qfa9v8fj57vu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIPo7i7BFudMn7BGZ1QSoMJK-8fwtCnR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254911212439-0k6rgofni3qbb8rcib73qfa9v8fj57vu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

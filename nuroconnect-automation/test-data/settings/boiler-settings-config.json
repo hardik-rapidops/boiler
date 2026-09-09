@@ -1,0 +1,58 @@
+{
+  "softwareVersionPrefixes": {
+    "W": "weilMcLain",
+    "V": "pattersonKelley"
+  },
+  "boilerTypes": {
+    "weilMcLain": {
+      "displayName": "Weil-McLain",
+      "settingsIndex": "1",
+      "updateData": {
+        "cascade": 1,
+        "brand": 1,
+        "errortype": 1,
+        "setpointWriteFlags": {
+          "chsetpointwrite": true,
+          "dhwsetpointwrite": true,
+          "dhwtanksetpointwrite": true
+        }
+      }
+    },
+    "pattersonKelley": {
+      "displayName": "Patterson-Kelley",
+      "settingsIndex": "0",
+      "updateData": {
+        "cascade": 0,
+        "brand": 0,
+        "errortype": 2,
+        "setpointWriteFlags": {
+          "chsetpointwrite": false,
+          "dhwsetpointwrite": false,
+          "dhwtanksetpointwrite": false
+        }
+      }
+    }
+  },
+  "scenarioSoftwareVersions": {
+    "pkAdmin": "W03.00.03",
+    "pkTech": "V03.00.03",
+    "pkRep": "V04.10.00",
+    "siteManager": "V05.02.01",
+    "siteSupervisor": "W03.00.03",
+    "siteUser": "V03.00.03"
+  },
+  "updateSettings": {
+    "errorCode": "10012",
+    "stateCode": "5",
+    "statusCode": "3",
+    "activeModeDemand": "0",
+    "relayAssignments": ["0", "0", "0", "0"]
+  },
+  "displayOverrides": {
+    "weilMcLain": {
+      "stateCode": {
+        "2": "Lockout"
+      }
+    }
+  }
+}

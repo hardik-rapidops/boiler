@@ -1,0 +1,181 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+<md-content>
+    <div layout="row" class="pl-10 pr-10" ng-show=" vm.boilersCount > 0 ||   (vm.user.roles[0].name == 'pkAdmin' &&  vm.boilersCount == 0)">
+        <div flex="85" flex-xs="65" flex-sm="80" flex-md="75">
+            <md-input-container class="md-block mb-0" flex-gt-sm style="margin-bottom: -14px !important;">
+                <label>
+                    <ng-md-icon icon="search" style="fill: #999999" size="24"></ng-md-icon>
+                    Search</label>
+                <input ng-model="searchBoilers" input-clear="black">
+            </md-input-container>
+        </div>
+        <div flex="15" flex-xs="35" flex-sm="20" flex-md="25" layout="row" layout-align="end center">
+            <md-switch ng-model="vm.autoRefresh" ng-change="vm.changeRefresh()" aria-label="Switch 1" class="md-primary"
+                       style="font-size: 14px;">
+                <span hide-xs>Auto Refresh</span>
+                <span hide show-xs style="    font-size: 13px;">Auto Refresh</span>
+            </md-switch>
+        </div>
+    </div>
+    <div ng-show="!searchBoilers || searchBoilers == ''">
+        <div id="boilers" ng-repeat="site in vm.sites | boilersfilter:searchBoilers" on-finish-render="ngRepeatFinished"
+             ng-show="vm.getBoilersCount(site.boilers.length) > 0" class="md-content-bg">
+            <button class="sites-accordion active" ng-accordian-toggle>
+                <ng-md-icon icon="location_on" style="fill: #808080"></ng-md-icon>
+                {{site.name}}
+            </button>
+            <div class="panel show">
+                <div layout="row" layout-wrap>
+                    <div flex="50" flex-xs="100" class="p10"
+                         ng-repeat="boiler in site.boilers  track by $index" ng-show="vm.isBoierFiltered(boiler)">
+                        <!-- <md-list-item class="md-3-line white-list-bg"
+                                      ui-sref="common.boiler-details({siteId:site.id,boilerId: boiler.id})"
+                                      ng-class="{'hpk-disconnected': !vm.isBoilerConnected(boiler,site),'hpk-lockout':boiler.errortype == 1 && vm.isBoilerConnected(boiler,site),'hpk-hold':boiler.errortype > 1 && vm.isBoilerConnected(boiler,site)}"> -->
+                            
+                            <md-list-item class="md-3-line white-list-bg"
+                                ng-click="vm.goToDetailsPage(site._id ? site._id : site.id,boiler._id ? boiler._id : boiler.id,boiler.brand)"
+                                ng-class="{'hpk-disconnected': !vm.isBoilerConnected(boiler,site),'hpk-lockout':boiler.errortype == 1 && vm.isBoilerConnected(boiler,site),'hpk-hold':boiler.errortype > 1 && vm.isBoilerConnected(boiler,site)}">
+
+                            <!-- <div class="sensor-img-bg"
+                                 ng-if="(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].imageFile!=''">
+                                <img
+                                        ng-src="{{imageURLPath}}/api/BoilerImages/view/{{(vm.boilerModels | filter:{modelKey:boiler.model}:true)[0].imageFile}}.png"
+                                        class="sensor-img">
+                            </div>
+                            <div class="sensor-img-bg"
+                                 ng-if="(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].imageFile==''">
+                                <img ng-src="images/header1-logo.png" class="sensor-img-default">
+                            </div> -->
+
+
+                            <div class="sensor-img-bg"
+                                ng-if="myImageFilter(boiler.brand, boiler)!=''">
+                                <img
+                                    ng-src="{{imageURLPath}}/api/BoilerImages/view/{{myImageFilter(boiler.brand, boiler)}}.png"
+                                    class="sensor-img">
+                            </div>
+                            <div class="sensor-img-bg"
+                                ng-if="myImageFilter(boiler.brand, boiler)==''">
+                                    <img ng-src="images/header1-logo.png" class="sensor-img-default">
+                            </div>
+
+
+                            <div class="md-list-item-text" layout="column">
+                                <h3 class="blue-text">{{boiler.name}}</h3>
+                                <p>
+                                    <!-- image:
+                                    <span>{{myImageFilter(boiler.brand)}}.png</span> -->
+                                    <!-- State:
+                                    <span class="value" ng-hide="boiler.connected">Disconnected</span>
+                                    <span class="value" ng-show="boiler.connected">{{vm.boilerStates[boiler.state].text}}</span>
+                                    
+                                    Status:
+                                    <span class="value">{{vm.boilerStatuses[boiler.status].text}}</span> -->
+                                    
+                                    State:
+                                    <span class="value" ng-hide="boiler.connected">Disconnected</span>
+                                    <span class="value" ng-show="boiler.connected">{{vm.getState(boiler.brand, boiler)}}</span>
+
+                                    Status:
+                                    <span class="value">{{vm.getStatus(boiler.brand, boiler)}}</span>
+                                    
+
+                                    Brand:
+                                    <span class="value">{{boiler.brand}}</span>
+                                </p>
+                            </div>
+                            <ng-md-icon icon="keyboard_arrow_right" style="fill: #d5d5d5"></ng-md-icon>
+                        </md-list-item>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-if="searchBoilers && searchBoilers != ''">
+        <div id="allboilers" ng-repeat="site1 in vm.allsites | boilersfilter:searchBoilers" on-finish-render="ngRepeatFinished"
+             ng-show="vm.getBoilersCount(site1.boilers.length) > 0" class="md-content-bg">
+            <button class="sites-accordion active" ng-accordian-toggle>
+                <ng-md-icon icon="location_on" style="fill: #808080"></ng-md-icon>
+                {{site1.name}}
+            </button>
+            <div class="panel show">
+                <div layout="row" layout-wrap>
+                    <div flex="50" flex-xs="100" class="p10"
+                         ng-repeat="boiler in site1.boilers  track by $index" ng-show="vm.isBoierFiltered(boiler)">
+                        <!-- <md-list-item class="md-3-line white-list-bg"
+                                      ui-sref="common.boiler-details({siteId:site.id,boilerId: boiler.id})"
+                                      ng-class="{'hpk-disconnected': !vm.isBoilerConnected(boiler,site1),'hpk-lockout':boiler.errortype == 1 && vm.isBoilerConnected(boiler,site1),'hpk-hold':boiler.errortype > 1 && vm.isBoilerConnected(boiler,site1)}"> -->
+
+                        <md-list-item class="md-3-line white-list-bg"
+                        ng-click="vm.goToDetailsPage(site1._id ? site1._id : site1.id,boiler._id ? boiler._id : boiler.id,boiler.brand)"
+                        ng-class="{'hpk-disconnected': !vm.isBoilerConnected(boiler,site1),'hpk-lockout':boiler.errortype == 1 && vm.isBoilerConnected(boiler,site1),'hpk-hold':boiler.errortype > 1 && vm.isBoilerConnected(boiler,site1)}">
+                            <!-- <div class="sensor-img-bg"
+                                 ng-if="(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].imageFile!=''">
+                                <img
+                                        ng-src="{{imageURLPath}}/api/BoilerImages/view/{{(vm.boilerModels | filter:{modelKey:boiler.model}:true)[0].imageFile}}.png"
+                                        class="sensor-img">
+                            </div>
+                            <div class="sensor-img-bg"
+                                 ng-if="(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].imageFile==''">
+                                <img ng-src="images/header1-logo.png" class="sensor-img-default">
+                            </div> -->
+
+                            <div class="sensor-img-bg"
+                                ng-if="myImageFilter(boiler.brand, boiler)!=''">
+                                <img
+                                    ng-src="{{imageURLPath}}/api/BoilerImages/view/{{myImageFilter(boiler.brand, boiler)}}.png"
+                                    class="sensor-img">
+                            </div>
+                            <div class="sensor-img-bg"
+                                ng-if="myImageFilter(boiler.brand, boiler)==''">
+                                <img ng-src="images/header1-logo.png" class="sensor-img-default">
+                            </div>
+                            
+                            <div class="md-list-item-text" layout="column">
+                                <h3 class="blue-text">{{boiler.name}}</h3>
+                                <p>
+                                    <!-- State:
+                                    <span class="value" ng-hide="boiler.connected">Disconnected</span>
+                                    <span class="value" ng-show="boiler.connected">{{vm.boilerStates[boiler.state].text}}</span>
+
+                                    Status:
+                                    <span class="value">{{vm.boilerStatuses[boiler.status].text}}</span> -->
+
+
+                                    State:
+                                    <span class="value" ng-hide="boiler.connected">Disconnected</span>
+                                    <span class="value" ng-show="boiler.connected">{{vm.getState(boiler.brand, boiler)}}</span>
+
+                                    Status:
+                                    <span class="value">{{vm.getStatus(boiler.brand, boiler)}}</span>
+                                    
+
+                                    Brand:
+                                    <span class="value">{{boiler.brand}}</span></p>
+                            </div>
+                            <ng-md-icon icon="keyboard_arrow_right" style="fill: #d5d5d5"></ng-md-icon>
+                        </md-list-item>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    </md-content>
+
+<md-content layout-padding ng-show="vm.noboilers || vm.boilersCount == 0" class="md-content-bg">
+    <div layout="column" layout-align="center center">
+        <h4 class="sites-heading text-center font-weight">You have no boilers. Would you like to <br>
+            Add a boiler?</h4>
+        <div layout="row" class="text-center">
+            <md-button class="md-raised md-primary" ng-click="addboiler();">Add a New Boiler</md-button>
+        </div>
+    </div>
+</md-content>

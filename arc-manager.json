@@ -1,0 +1,12 @@
+{
+  "ids": {
+    "ManagerHost": 8,
+    "LoadBalancer": 1
+  },
+  "models": {
+    "ManagerHost": {
+      "935d89ee-ad99-4541-91ee-aca889385a7c": "{\"id\":\"935d89ee-ad99-4541-91ee-aca889385a7c\",\"host\":\"ec2-54-236-193-23.compute-1.amazonaws.com\",\"port\":8701,\"actions\":[\"delete\",\"edit\"],\"protocol\":\"http\",\"created\":1480324335504,\"error\":{\"message\":\"connect ETIMEDOUT 54.236.193.23:8701\"},\"errorType\":\"unknown\",\"app\":null,\"processes\":null}"
+    },
+    "LoadBalancer": {}
+  }
+}

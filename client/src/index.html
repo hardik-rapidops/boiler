@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta
+            name="viewport"
+            content="viewport-fit=cover, initial-scale=1, user-scalable=no, width=device-width,height=device-height"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="robots" content="noindex" />
+        <link rel="icon" href="favicon_harsco1.ico" />
+        <title>Nuro Connect</title>
+        <script src="cordova.js"></script>
+        <script
+            language="JavaScript"
+            type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        ></script>
+        <script src="https://www.gstatic.com/firebasejs/6.1.0/firebase.js"></script>
+
+        <!-- build:css -->
+        <!-- endbuild -->
+        <!-- Loading core css-->
+        <!-- build:js -->
+        <!-- endbuild -->
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
+        <!-- bower:css -->
+        <!-- run `gulp inject` to automatically populate bower styles dependencies -->
+        <!-- endbower -->
+        <!-- endbuild -->
+        <!-- build:css({.tmp/serve,src}) styles/app.css -->
+        <!-- inject:css -->
+        <!-- css files will be automatically insert here -->
+        <!-- endinject -->
+        <!-- endbuild -->
+    </head>
+
+    <body ng-cloak>
+        <div ui-view layout="row" flex style="height: 100%"></div>
+
+        <!-- build:js(src) scripts/vendor.js -->
+        <!-- bower:js -->
+        <!-- run `gulp inject` to automatically populate bower script dependencies -->
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp/serve,.tmp/partials,src}) scripts/app.js -->
+        <!-- inject:js -->
+        <!-- js files will be automatically insert here -->
+        <!-- endinject -->
+        <!-- inject:partials -->
+        <!-- angular templates will be automatically converted in js and inserted here -->
+        <!-- endinject -->
+        <!-- endbuild -->
+    </body>
+    <script type="text/javascript">
+        // function startAngularApp() {
+        console.log("👉 Bootstrapping Angular app...");
+        angular.bootstrap(document, ["harsco-pk"]);
+        // }
+        function onDeviceReady() {
+            try {
+                if (navigator.splashscreen) navigator.splashscreen.hide();
+
+                if (!window.FirebasePlugin) {
+                    console.warn("FirebasePlugin is NOT available yet");
+                    return;
+                }
+
+                console.log("✅ FirebasePlugin is available");
+
+                // 1️⃣ Check permission first
+                FirebasePlugin.hasPermission(
+                    function (hasPermission) {
+                        console.log(
+                            "Notification permission already granted? ",
+                            hasPermission
+                        );
+
+                        if (!hasPermission) {
+                            // Ask only if not already granted
+                            FirebasePlugin.grantPermission(
+                                function (granted) {
+                                    console.log(
+                                        "Permission granted now: ",
+                                        granted
+                                    );
+                                    initFirebasePush();
+                                },
+                                function (error) {
+                                    console.error(
+                                        "Permission request error:",
+                                        error
+                                    );
+                                }
+                            );
+                        } else {
+                            // Already granted, proceed immediately
+                            initFirebasePush();
+                        }
+                    },
+                    function (error) {
+                        console.error("Error checking permission:", error);
+                        // fallback: try initializing anyway
+                        initFirebasePush();
+                    }
+                );
+
+                // Handle back button exit
+                document.addEventListener(
+                    "backbutton",
+                    function (e) {
+                        e.preventDefault();
+                        if (
+                            confirm(
+                                "Are you sure you want to exit from the app?"
+                            )
+                        ) {
+                            navigator.app.exitApp();
+                        }
+                    },
+                    false
+                );
+            } catch (e) {
+                console.error("🔥 Device ready error:", e);
+            }
+        }
+
+        function initFirebasePush() {
+            try {
+                // iOS-only: Listen for APNs token
+                window.FirebasePlugin.onApnsTokenReceived(function (apnsToken) {
+                    console.log("📱 APNs Device Token:", apnsToken);
+                });
+
+                // Get FCM token
+                FirebasePlugin.getToken(
+                    function (token) {
+                        console.log("🎯 Firebase FCM Token:", token);
+                        // send this token to your server
+                    },
+                    function (error) {
+                        console.error("❌ Firebase getToken error:", error);
+                    }
+                );
+
+                // Listen for FCM token refresh
+                FirebasePlugin.onTokenRefresh(function (newToken) {
+                    console.log("🔄 FCM token refreshed:", newToken);
+                });
+            } catch (err) {
+                console.error("🔥 initFirebasePush error:", err);
+            }
+        }
+
+        console.log("navigator071025.userAgent--->", navigator.userAgent);
+        console.log("window.cordova", window.cordova);
+
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/)) {
+            // document.addEventListener("deviceready", onDeviceReady, false);
+            // startAngularApp();
+            document.addEventListener(
+                "deviceready",
+                function () {
+                    console.log(">>>>>--- Cordova deviceready fired!");
+                    onDeviceReady();
+                },
+                false
+            );
+        } else {
+            console.log("worked on web");
+            // startAngularApp();
+        }
+    </script>
+    <script
+        src="https://rawgit.com/srfrnk/ua-device-detector/master/ua-device-detector.js"
+        type="text/javascript"
+    ></script>
+    <script
+        src="https://rawgit.com/srfrnk/re-tree/master/re-tree.js"
+        type="text/javascript"
+    ></script>
+    <script
+        src="https://rawgit.com/srfrnk/ng-device-detector/master/ng-device-detector.js"
+        type="text/javascript"
+    ></script>
+</html>

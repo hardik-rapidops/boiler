@@ -1,0 +1,121 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+
+<md-content class="md-content-bg">
+
+    <div layout="row" layout-wrap>
+        <div layout="row" flex="100" class="pl-10 pr-10">
+            <h4 class="blue-text">General info</h4>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Name</label>
+                <input type="text" ng-model="vm.boiler.name" my-maxlength="18" ng-disabled="vm.siterole == 2 && vm.tech == false">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Description</label>
+                <input type="text" ng-model="vm.boiler.description" ng-disabled="vm.siterole == 2 && vm.tech == false">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Sites</label>
+                <md-select ng-model="vm.selectedSiteId" class="font-16 text-black" ng-change="vm.reseterrorlog()" ng-disabled="vm.siterole == 2 && vm.tech == false">
+                    <md-option ng-value="option.id" ng-selected="{{vm.selectedSiteId == option.id? true : false}}"
+                               ng-repeat="option in vm.site">{{option.name }}
+                    </md-option>
+                </md-select>
+                <p class ="login-error">{{errsite}}</p>
+            </md-input-container>
+        </div>
+        <div layout="row" flex="100" class="pl-10 pr-10">
+            <h4 class="blue-text">Device info</h4>
+        </div>
+
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Boiler Model</label>
+                <input ng-model="(vm.boilerModels | filter:{modelKey:vm.boiler.model}:true)[0].name" ng-disabled="true">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Sola S/N</label>
+                <input type="text" ng-model="vm.boiler.solaSN" ng-disabled="true">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Nuro S/N</label>
+                <input type="text" ng-model="vm.boiler.nuroSN" ng-disabled="true">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Nuro SW Version</label>
+                <input type="text" ng-model="vm.boiler.software" ng-disabled="true">
+            </md-input-container>
+        </div>
+        <!--<div flex="50" flex-xs="100" class="pl-10 pr-10" ng-hide="vm.siterole == 2 && vm.tech == false">-->
+        <!--<div class="select-box" >-->
+            <!--<div layout="row" class="each-select">-->
+                <!--<div flex="85" layout="column" layout-align="center start">-->
+                    <!--<span class="font-14">Boiler is paid</span>-->
+                <!--</div>-->
+                <!--<div flex="15" layout="column" layout-align="center end" class="blue-text">-->
+                    <!--<md-switch class="md-primary" ng-model="vm.boiler.isPaid" ng-true-value="true" ng-false-value="false">-->
+                    <!--</md-switch>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+            <!--</div>-->
+        </div>
+        
+        <div layout="row" flex="100" class="pl-10 pr-10" ng-hide="vm.siterole == 2 && vm.tech == false">
+            <h4 class="blue-text">Settings</h4>
+        </div>
+
+        <div flex="50" flex-xs="100" class="pl-10 pr-10" ng-hide="vm.siterole == 2 && vm.tech == false">
+            <div class="select-box">
+                <div layout="row" class="each-select" ng-class="{'disabled': !vm.selectedSiteId}"
+                    ui-sref="common.boiler-alerts({boilerId: vm.boilerId, siteId: vm.selectedSiteId})" ui-sref-opts="{reload: true}"
+                    ng-if="vm.selectedSiteId">
+                
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Boiler Alerts</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+                
+                <!-- Disabled version -->
+                <div layout="row" class="each-select disabled" ng-if="!vm.selectedSiteId">
+                
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Boiler Alerts</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+                <div layout="row" class="each-select"
+                     ui-sref="common.boiler-settings({boilerId:vm.boilerId,siteId:vm.selectedSiteId})">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Advanced Boiler Settings</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="row" flex="100" layout-align="end center" ng-hide="vm.siterole == 2 && vm.tech == false">
+            <md-button class="md-raised md-primary" ng-click="vm.save()">Save</md-button>
+        </div>
+    </div>
+
+</md-content>

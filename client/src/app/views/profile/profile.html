@@ -1,0 +1,76 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+
+<md-content class="md-content-bg pt-18">
+    <div layout="row" layout-wrap>
+        <div flex="50" flex-xs="50" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>First Name</label>
+                <input type="text" ng-model="vm.user.firstName" ng-keydown=" vm.keyDown($event)" ng-disabled="vm.demo">
+                <p class ="login-error">{{err1}}</p>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="50" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Last Name</label>
+                <input type="text" ng-model="vm.user.lastName" ng-keydown=" vm.keyDown($event)" ng-disabled="vm.demo">
+                <p class ="login-error">{{err2}}</p>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10  mb-10">
+            <md-input-container class="md-block mt-0" flex-gt-sm>
+                <label>Title</label>
+                <!-- <md-select name="favoriteColor" ng-model="vm.user.title">
+                    <md-option value="1">Bldg Supervisor/Mgr</md-option> -->
+                <md-select ng-model="vm.user.titledata" ng-model-options="{trackBy: '$value.key'}" class="font-16 text-black" ng-disabled="vm.demo">
+                        <md-option ng-value="option" ng-repeat="option in vm.titledata">{{ option.text }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Email</label>
+                <input type="text" ng-model="vm.user.email" ng-disabled="true">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Phone</label>
+                <input type="text" ng-keypress="vm.isNumberKey($event)" ui-mask ="{{'(999) 999-9999'}}" ng-model="vm.user.phone" ng-disabled="vm.demo">
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Company Name</label>
+                <input type="text" ng-model="vm.user.company" ng-keydown=" vm.keyDown($event)" ng-disabled="vm.demo">
+                <p class ="login-error">{{err3}}</p>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10 mb-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Temperature Unit</label>
+                 <md-select ng-model="vm.user.temperature" ng-model-options="{trackBy: '$value.id'}" class="font-16 text-black" ng-disabled="vm.demo">
+                        <md-option ng-value="option" ng-repeat="option in vm.temp">{{ option.name }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+    </div>
+    <div layout="row" layout-wrap ng-hide="vm.demo">
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <div class="select-box">
+                <div layout="row" class="each-select" ng-click="vm.changePassword()">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Change Password</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="row" flex="100" layout-align="end center" ng-hide="vm.demo">
+        <md-button class="md-raised md-primary" ng-click="vm.save()">Save</md-button>
+    </div>
+</md-content>

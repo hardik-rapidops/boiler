@@ -1,0 +1,7 @@
+{
+  "local": {
+    "name": "db",
+    "connector": "memory",
+    "file":"local.db.dat"
+  }
+}

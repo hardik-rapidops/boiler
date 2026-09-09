@@ -1,0 +1,22 @@
+{
+  "ios": {
+    "debug": {
+      "codeSignIdentity": "iPhone Distribution",
+      "provisioningProfile": "cabb0732-ef32-47ec-b9da-f6e42b03e43e",
+      "developmentTeam": "84KLUUGWB3",
+      "packageType": "enterprise",
+      "buildFlag": [
+        "-UseModernBuildSystem=0"
+      ]
+    },
+    "release": {
+      "codeSignIdentity": "iPhone Distribution",
+      "provisioningProfile": "cabb0732-ef32-47ec-b9da-f6e42b03e43e",
+      "developmentTeam": "84KLUUGWB3",
+      "packageType": "enterprise",
+      "buildFlag": [
+        "-UseModernBuildSystem=0"
+      ]
+    }
+  }
+}

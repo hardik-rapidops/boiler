@@ -1,0 +1,28 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+
+<md-content class="md-content-bg">
+    <div layout="row" layout-wrap>
+        <div flex="50" flex-xs="100" class="p10">
+            <div class="select-box">
+                <div layout="row" class="each-select" ng-click="BoilerMain_Boiler_settings($event)">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Delete this boiler </span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+                <div layout="row" class="each-select" ui-sref="common.replace-boiler({siteId:vm.siteId,boilerId:vm.boilerId})">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Replace Nuro control</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>

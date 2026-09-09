@@ -1,0 +1,20 @@
+<md-toolbar>
+    <ng-include src="'app/views/default.html'"></ng-include>
+</md-toolbar>
+
+<md-content layout-padding class="md-content-bg">
+    <div layout="column" layout-align="center center">
+        <h4 class="sites-heading text-center font-weight">Enter the new code from the boiler that you are replacing. Check user manual for more information on obtaining the code.</h4>
+        <div layout="row" class="mb-10">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" id="f_1" ng-model="vm.code[0]" maxlength="1" ng-keyup="vm.tab($event);vm.keyup($event,2,1);" class="password-text" placeholder="*" ng-class="error">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" id="f_2" ng-model="vm.code[1]" maxlength="1" ng-keyup="vm.tab($event);vm.keyup($event,3,2);" class="password-text" placeholder="*" ng-class="error">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" id="f_3" ng-model="vm.code[2]" maxlength="1" ng-keyup="vm.tab($event);vm.keyup($event,4,3);" class="password-text" placeholder="*" ng-class="error">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" id="f_4" ng-model="vm.code[3]" maxlength="1" ng-keyup="vm.tab($event);vm.keyup($event,5,4);" class="password-text" placeholder="*" ng-class="error">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" id="f_5" ng-model="vm.code[4]" maxlength="1" ng-keyup="vm.tab($event);vm.keyup($event,6,5);" class="password-text" placeholder="*" ng-class="error">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'');" id="f_6" ng-model="vm.code[5]" maxlength="1" ng-keyup="vm.tab($event);vm.keyup($event,6,6);" class="password-text" placeholder="*" ng-class="error">
+        </div>
+        <div layout="row" class="text-center">
+            <md-button ng-click="vm.add($event)" class="md-raised md-primary">Next</md-button>
+        </div>
+    </div>
+</md-content>

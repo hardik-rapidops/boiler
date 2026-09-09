@@ -1,0 +1,158 @@
+crashlytics_api_token = '9f82dc6f95b777def796fb23efec4def8d81559b'
+crashlytics_build_secret = 'e0b041d9b1c8aafc35bd5aa723c965f77c93dc5a4d035eff48da199debaeca59'
+
+build_number = Time.new.strftime("%y%m%d")+ (ENV['BITBUCKET_BUILD_NUMBER'] || '000')
+
+platform :ios do
+  desc "Build, Fabric, Deploy iOS app"
+
+  lane :fabric do
+    crashlytics(
+        api_token: crashlytics_api_token,
+        build_secret: crashlytics_build_secret,
+        ipa_path: ENV['CORDOVA_IOS_RELEASE_BUILD_PATH']
+      )
+  end
+
+  lane :beta do
+
+    type = 'enterprise'
+    team_id = '84KLUUGWB3'
+    username = 'developer@vensi.com'
+    app_identifier = 'com.vensi.harsco'
+
+    add_badge(
+      glob: '/platforms/ios/Nuro Connect/Images.xcassets/AppIcon.appiconset/icon*.{png,PNG}'
+    )
+
+    unlock_keychain(
+      # to recreate the keychain:
+      # security create-keychain -p 'p#UkKrl135^' /build/security/automated_build.keychain
+      # security import vensi.p12 -t agg -k /build/security/automated_build.keychain -P '<p12 password>' -A
+      path: "/build/security/automated_build.keychain",
+      password: ENV['IOS_KEYCHAIN_PASSWORD'] || "p#UkKrl135^",
+      set_default: true
+    )
+
+    update_app_identifier(
+          xcodeproj: "platforms/ios/Nuro Connect.xcodeproj",
+          plist_path: "Nuro Connect/Nuro Connect-Info.plist",
+          app_identifier: app_identifier
+        )
+
+    cordova(
+      platform: 'ios',
+      type: type,
+      team_id: team_id,
+      browserify: true,
+      cordova_prepare: false,
+      build_number: build_number
+    )
+
+    fabric
+  end
+
+  lane :adhoc do
+
+    add_badge(
+      alpha: true,
+      glob: '/platforms/ios/Nuro Connect/Images.xcassets/AppIcon.appiconset/icon*.{png,PNG}'
+    )
+
+    cordova(
+      platform: 'ios',
+      type: 'adhoc',
+      team_id: 'W5J9WEM5K6',
+      browserify: true,
+      cordova_prepare: false,
+      build_number: build_number
+    )
+
+    fabric
+  end
+
+  lane :release do
+
+#todo: check if there are pending commits
+
+    type = 'app-store'
+    team_id = 'W5J9WEM5K6'
+    app_identifier = 'com.vensi.harsco-dev'
+
+    cordova(
+      platform: 'ios',
+      type: 'appstore',
+      team_id: 'W5J9WEM5K6',
+      browserify: true,
+      cordova_prepare: false,
+      build_number: build_number
+    )
+
+    fabric
+
+#    appstore(ipa: ENV['CORDOVA_IOS_RELEASE_BUILD_PATH'])
+  end
+end
+
+platform :android do
+  desc "Build, Fabric, Deploy Android app"
+
+  lane :builddebug do
+
+    cordova(
+        platform: 'android',
+        keystore_path:'./codesigning/codesign.jks',
+        keystore_alias: 'harsco',
+        keystore_password: 'vensi123',
+        browserify: true,
+        cordova_prepare: false,
+        build_number: build_number,
+        release: false
+     )
+  end
+
+  lane :build do
+
+  add_badge(
+        glob: '/platforms/android/res/*/icon*.{png,PNG}'
+      )
+
+    cordova(
+        platform: 'android',
+        keystore_path:'./codesigning/codesign.jks',
+        keystore_alias: 'harsco',
+        keystore_password: 'vensi123',
+        browserify: true,
+        cordova_prepare: false,
+        build_number: build_number
+     )
+  end
+
+  lane :fabric do
+
+    crashlytics(
+        api_token: crashlytics_api_token,
+        build_secret: crashlytics_build_secret,
+        apk_path: './platforms/android/app/build/outputs/apk/debug/app-debug.apk',
+      )
+  end
+
+  lane :beta do
+
+
+
+    builddebug
+
+    fabric
+  end
+
+  lane :release do
+
+    build
+
+    fabric
+
+    supply(apk: './platforms/android/app/build/outputs/apk/release/app-release.apk')
+  end
+
+end

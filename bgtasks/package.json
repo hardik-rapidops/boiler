@@ -1,0 +1,12 @@
+{
+  "name": "bgtask",
+  "author": {
+    "name": "Nik Markovic",
+    "email": "Nik.Markovic@vensi.com"
+  },
+  "version": "0.0.1",
+  "description": "Cleanup task for nightly",
+  "dependencies": {
+    "mongodb": "^3.1.8"
+  }
+}

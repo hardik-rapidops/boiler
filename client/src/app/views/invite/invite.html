@@ -1,0 +1,89 @@
+ <md-content flex >
+<div layout="column" flex>
+    <div id="login" layout="column">
+        <div id="login-form-wrapper" layout="column" layout-align="center center">
+            <div id="login-form" class="md-whiteframe-8dp">
+                <div class="logo"> <span> <img src="images/header1-logo.png" width="140"> </span> </div>
+                <div class="smart-coach-bg"><strong>NURO CONNECT</strong></div>
+                <div class="title">Create an account</div>
+                <form>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>First Name</label>
+                        <input type="text" ng-model="vm.user.firstName" ng-keydown=" vm.keyDown($event)">
+                               <p class ="login-error">{{err1}}</p>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Last Name</label>
+                        <input type="text" ng-model="vm.user.lastName" ng-keydown=" vm.keyDown($event)">
+                               <p class ="login-error">{{err2}}</p>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Title </label>
+                        <md-select ng-model="vm.user.titledata" ng-model-options="{trackBy: '$value.key'}" class="font-16 text-black">
+                        <md-option ng-value="option" ng-repeat="option in vm.titledata">{{ option.text }}</md-option>
+                    </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block mt-20" flex-gt-sm>
+                        <label>Company Name</label>
+                        <input type="text" ng-model="vm.user.company" ng-keydown=" vm.keyDown($event)">
+                               <p class ="login-error">{{err3}}</p>
+                    </md-input-container>
+                    <!--<md-input-container class="md-block" flex-gt-sm>-->
+                        <!--<label>Email</label>-->
+                        <!--<input type="text" autocorrect="off" autocapitalize="off" ng-model="vm.user.email" ng-keydown=" vm.keyDown($event)">-->
+                               <!--<p class ="login-error">{{err4}}</p>-->
+                    <!--</md-input-container>-->
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Password</label>
+                        <input type="password" ng-model="vm.user.password" ng-keydown=" vm.keyDown($event)">
+                               <p class ="login-error">{{err5}}</p>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Password ( Confirm)</label>
+                        <input type="password" ng-model="vm.user.c_password" ng-keydown=" vm.keyDown($event)">
+                               <p class ="login-error">{{err6}}</p>
+                    </md-input-container>
+                    <div  layout="row" layout-align="center center">
+                        <md-checkbox class="md-primary" ng-model="vm.accept" ng-keydown=" vm.keyDown($event)" style="text-align: left;">
+                            I read and accept <a href="#" class="md-accent-color font-14">terms and conditions</a>
+                        </md-checkbox>
+                    </div>
+                               <p class ="login-error">{{err7}}</p>
+
+                    <div  layout="row" layout-align="center center">
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha" data-sitekey="6LcV_cIUAAAAALoKpjjAqkqPo6lu7Og44cY39XJt"></div>
+                    </div>
+                               <p class ="login-error">{{err8}}</p>
+                        <noscript>
+                          <div>
+                            <div style="width: 302px; height: 422px; position: relative;">
+                              <div style="width: 302px; height: 422px; position: absolute;">
+                                <iframe src="https://www.google.com/recaptcha/api/fallback?k=6LcV_cIUAAAAALoKpjjAqkqPo6lu7Og44cY39XJt"
+                                        frameborder="0" scrolling="no"
+                                        style="width: 302px; height:422px; border-style: none;">
+                                </iframe>
+                              </div>
+                            </div>
+                            <div style="width: 300px; height: 60px; border-style: none;
+                                           bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px;
+                                           background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
+                              <textarea id="g-recaptcha-response" name="g-recaptcha-response"
+                                           class="g-recaptcha-response"
+                                           style="width: 250px; height: 40px; border: 1px solid #c1c1c1;
+                                                  margin: 10px 25px; padding: 0px; resize: none;" >
+                              </textarea>
+                            </div>
+                          </div>
+                        </noscript>
+
+                    <md-button type="submit" ng-click="vm.register()" class="md-raised md-primary submit-button"> CREATE MY ACCOUNT </md-button>
+                </form>
+                <!--<div class="register" layout="row" layout-xs="row" layout-align="center center"> <span class="text">Already have an account?</span>-->
+                    <!--<a href="#!/login">Log in</a>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+</md-content>

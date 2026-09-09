@@ -1,0 +1,216 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Description" : "Harscopk Service",
+
+  "Parameters" : {
+    "Env" : {
+      "Default" : "DEV",
+      "Description" : "Environment to assume for deployment harscopk-dev or harscopk-prod server",
+      "Type" : "String",
+      "AllowedValues" : [ "DEV","PRD" ],
+      "ConstraintDescription" : "must be a valid environment - DEV or PRD."
+    },
+  "LoadBalancer" : {
+      "Description" : "Override load balancer to use for the cluster. Default will be harscopk-dev or harscopk-prod",
+      "Type" : "String",
+      "Default" : "harscopk-dev",
+      "AllowedValues" : ["harscopk-dev", "harscopk-prod"],
+      "ConstraintDescription" : "must be a valid loadbalancer - DEV or PRD."
+    },
+    "InstanceType" : {
+      "Description" : "EC2 instance type (pick smaller instances for testing)",
+      "Type" : "String",
+      "Default" : "m3.large",
+      "AllowedValues" : ["m3.large", "m3.medium", "t2.small"],
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "BaseImage" : {
+      "Description" : "Image to use (Default is AMI 2016.03.3 (HVM)). Update image when AWS releases new AMI",
+      "Type" : "String",
+      "Default" : "ami-c481fad3"
+    },
+    "AsMinSize" : {
+      "Default" : "1",
+      "Description" : "Minimum number of AutoScaling instances",
+      "Type" : "String"
+    },
+    "AsMaxSize" : {
+      "Default" : "1",
+      "Description" : "Maximum number of AutoScaling instances",
+      "Type" : "String"
+    },
+    "IamProfile" : {
+    "Description" : "Secure access to aws s3 resources",
+    "Type" : "String",
+    "Default" : "harscopk-role"
+    },
+    "SshKey" : {
+      "Description" : "SSH keypair to use for the cluster",
+      "Type" : "String",
+      "Default" : "harscopk-keypair",
+      "AllowedValues" : ["harscopk-keypair", "harscopk-prod-keypair"],
+      "ConstraintDescription" : "must be a valid keypair - DEV or PRD."
+    },
+    "Version" : {
+      "Description" : "To fetch harscopk-data from which version dev or prod",
+      "Type" : "String",
+      "Default" : ""
+    }
+  },
+  "Mappings" : {
+    "VpcSettings": {
+      "DEV": {
+        "SecurityGroups": [
+          "sg-5062a22d",
+          "sg-9162a2ec"
+        ],
+        "SubnetIds": [
+          "subnet-f02f88dd",
+          "subnet-3946d070",
+          "subnet-69469d32"
+        ],
+        "SubnetAzs": [
+          "us-east-1a",
+          "us-east-1b",
+          "us-east-1c"
+        ]
+      },
+      "PRD": {
+        "SecurityGroups": [
+          "sg-62eedf1f",
+          "sg-b7d6e7ca"
+        ],
+        "SubnetIds": [
+          "subnet-c878e6e5",
+          "subnet-a71059ee",
+          "subnet-f5ff6fae"
+        ],
+        "SubnetAzs": [
+          "us-east-1a",
+          "us-east-1b",
+          "us-east-1c"
+        ]
+      }
+    }
+  },
+  "Resources": {
+    "HarscopkServerGroup" : {
+    "Type" : "AWS::AutoScaling::AutoScalingGroup",
+      "Properties" : {
+        "AvailabilityZones" : {"Fn::FindInMap" : [ "VpcSettings", { "Ref" : "Env" }, "SubnetAzs" ]},
+        "VPCZoneIdentifier" : {"Fn::FindInMap" : [ "VpcSettings", { "Ref" : "Env" }, "SubnetIds" ]},
+        "LaunchConfigurationName" : { "Ref" : "HarscopkLaunchConfig" },
+        "MinSize" : { "Ref" : "AsMinSize" },
+        "MaxSize" : { "Ref" : "AsMaxSize" },
+        "LoadBalancerNames" : [{ "Ref" : "LoadBalancer"}],
+        "Tags": [
+           {
+               "Key" : "Name",
+               "Value": { "Fn::Join" : ["", ["harsco-", { "Ref" : "AWS::StackName"}]] },
+               "PropagateAtLaunch" : true
+           }
+        ]
+      }
+    },
+    "HarscopkLaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata" : {
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+            "services" : {
+              "sysvinit" : {
+                "cfn-hup" : {
+                  "enabled" : "true",
+                  "ensureRunning" : "true",
+                  "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]
+                }
+              }
+            },
+            "files" : {
+              "/dev/shm/cloud-bootstrap.sh" : {
+                "content" : { "Fn::Join" : ["", [
+                  "#!/bin/bash -x \n",
+                  " ############## DEPLOYING Harscopk ############## \n",
+                  "deploypath=/opt/harsco \n",
+                  "mkdir $deploypath \n",
+                  "chown ec2-user:ec2-user $deploypath \n",
+                  "pushd $deploypath \n",
+                  "aws s3 cp s3://harscopk-data/release/",{"Ref" : "Env"},"",{"Ref" : "Version"},"/harsco.tar.gz . --region us-east-1 \n",
+                  "tar -xvf harsco.tar.gz \n",
+                  "pushd setup/deploy \n",
+                  "./package_install.sh >> /tmp/package_install.log 2>&1 \n",
+                  "./server_setup.sh ",{"Ref" : "Env"},"",{"Ref" : "Version"}," >> /tmp/server_setup.log 2>&1 \n",
+                  "popd \n",
+                  "popd \n",
+                  "echo OK Deployed \n",
+                  "\n"
+                ]] },
+                "mode" : "000755",
+                "owner" : "root",
+                "group" : "root"
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
+                    "content" : { "Fn::Join" : ["", [
+                        "[cfn-auto-reloader-hook]", "\n",
+                        "triggers=post.update", "\n",
+                        "path=Resources.HarscopkLaunchConfig.Metadata.AWS::CloudFormation::Init", "\n",
+                        "action=/opt/aws/bin/cfn-init ",
+                        " --stack ", { "Ref" : "AWS::StackName" },
+                        " --resource HarscopkLaunchConfig ",
+                        " --region ", { "Ref" : "AWS::Region" }, "\n",
+                        "runas=root", "\n"
+                    ]] },
+                    "mode" : "000755",
+                    "owner" : "root",
+                    "group" : "root"
+              },
+              "/etc/cfn/cfn-hup.conf" : {
+                    "content" : { "Fn::Join" : ["", [
+                        "[main]", "\n",
+                        "stack=", { "Ref" : "AWS::StackName" }, "\n",
+                        "region=", { "Ref" : "AWS::Region" }, "\n",
+                        "interval=1\n"
+                    ]] },
+                    "mode" : "000755",
+                    "owner" : "root",
+                    "group" : "root"
+              }
+            },
+            "commands" : {
+                "init" : {
+                    "command" : "./cloud-bootstrap.sh >> /tmp/bootstrap.log 2>&1",
+                    "cwd" : "/dev/shm"
+                }
+            }
+          }
+        }
+      },
+      "Properties": {
+        "ImageId" : { "Ref" : "BaseImage" },
+        "InstanceType"   : { "Ref" : "InstanceType" },
+        "IamInstanceProfile" : { "Ref" : "IamProfile"},
+        "KeyName" : { "Ref" : "SshKey"},
+        "AssociatePublicIpAddress" : "true",
+        "SecurityGroups" : { "Fn::FindInMap" : [ "VpcSettings", { "Ref" : "Env" }, "SecurityGroups" ]},
+        "BlockDeviceMappings" : [
+               {
+                  "DeviceName" : "/dev/xvda",
+                  "Ebs" : {
+                     "VolumeType" : "gp2",
+                     "DeleteOnTermination" : "true",
+                     "VolumeSize" : "40"
+                  }
+               }
+             ],
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+			"#!/bin/bash\n",
+			"\n",
+			"/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackId" }, " -r HarscopkLaunchConfig  --region ", { "Ref" : "AWS::Region" }, "\n",
+			" \n",
+			""
+        ]]}}
+      }
+    }
+  }
+}

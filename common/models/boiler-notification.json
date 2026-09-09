@@ -1,0 +1,42 @@
+{
+  "name": "BoilerNotification",
+  "replaceOnPUT": false,
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "forceId": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+      "id": {
+          "type": "string",
+          "id": true,
+          "required": true,
+          "defaultFn": "uuidv4"
+      },
+    "notificationText": {
+      "type": "string",
+      "required": true
+    },
+    "notifiedDate": {
+      "type": "date",
+      "required": true
+    },
+    "sentToUsers": {
+      "type": [
+        "user"
+      ]
+    }
+  },
+  "validations": [],
+  "relations": {
+    "boiler": {
+      "type": "belongsTo",
+      "model": "Boiler",
+      "foreignKey": "boilerId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

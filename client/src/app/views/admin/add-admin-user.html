@@ -1,0 +1,31 @@
+<ng-include src="'app/views/default.html'"></ng-include>
+<md-content class="md-content-bg pt-18">
+    <div layout="row" layout-wrap>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Email</label>
+                <input type="text" ng-model="vm.email" ng-keydown=" vm.keyDown($event)" ng-blur="vm.onEmailBlur()">
+                <p class="font-14 p10" >(Enter multiple email addresses separated by comma(,))</p>
+                <p class ="login-error">{{err1}}</p>
+            </md-input-container>
+        </div>
+
+        <div flex="50" flex-xs="100" class="pl-10 pr-10  mb-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Role</label>
+
+                <md-select ng-model="vm.role" class="font-16 text-black">
+                <md-option value="{{option.id}}" ng-repeat="option in vm.role">{{ option.name }}</md-option>
+                </md-select>
+
+                <p class ="login-error">{{err2}}</p>
+            </md-input-container>
+        </div>
+
+    </div>
+
+    <div layout="row" flex="100" layout-align="end center">
+        <md-button class="md-raised md-primary" ng-click="vm.invite()" ng-disabled="vm.emailStatusSuccess !== true">Invite</md-button>
+    </div>
+
+</md-content>

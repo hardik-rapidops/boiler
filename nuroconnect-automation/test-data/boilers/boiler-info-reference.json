@@ -1,0 +1,179 @@
+{
+  "sections": {
+    "temperatureSensors": {
+      "title": "Temperature Sensors (Read-Only)",
+      "fields": [
+        {
+          "propertyKey": "supply",
+          "payloadPropertyKey": "supply",
+          "rawValue": 808,
+          "label": "Outlet Temperature",
+          "displayedValue": "80.8 °F"
+        },
+        {
+          "propertyKey": "return",
+          "payloadPropertyKey": "return_",
+          "rawValue": 806,
+          "label": "Inlet Temperature",
+          "displayedValue": "80.6 °F"
+        },
+        {
+          "propertyKey": "stack",
+          "payloadPropertyKey": "stack",
+          "rawValue": 819,
+          "label": "Exhaust Temperature",
+          "displayedValue": "81.9 °F"
+        },
+        {
+          "propertyKey": "dhw",
+          "payloadPropertyKey": "dhw",
+          "rawValue": 1100,
+          "label": "DHW Temperature",
+          "displayedValue": "110 °F"
+        },
+        {
+          "propertyKey": "header",
+          "payloadPropertyKey": "header",
+          "rawValue": 33024,
+          "label": "Header Temperature",
+          "displayedValue": "Open"
+        },
+        {
+          "propertyKey": "hx",
+          "payloadPropertyKey": "hx",
+          "rawValue": 33024,
+          "label": "Heat Exchanger Temperature",
+          "displayedValue": "Open"
+        },
+        {
+          "propertyKey": "oda",
+          "payloadPropertyKey": "oda",
+          "rawValue": 720,
+          "label": "Outdoor Air Temperature",
+          "displayedValue": "72 °F"
+        }
+      ]
+    },
+    "setpointProperties": {
+      "title": "Setpoint Properties (Writable)",
+      "fields": [
+        {
+          "propertyKey": "chsetpoint",
+          "payloadPropertyKey": "chsetpoint",
+          "rawValue": 1250,
+          "label": "CH Setpoint",
+          "displayedValue": "125 °F",
+          "writeFlag": "chsetpointwrite"
+        },
+        {
+          "propertyKey": "dhwsetpoint",
+          "payloadPropertyKey": "dhwsetpoint",
+          "rawValue": 1100,
+          "label": "DHW Setpoint",
+          "displayedValue": "110 °F",
+          "writeFlag": "dhwsetpointwrite"
+        },
+        {
+          "propertyKey": "dhwtanksetpoint",
+          "payloadPropertyKey": "dhwtanksetpoint",
+          "rawValue": 1100,
+          "label": "DHW Tank Setpoint",
+          "displayedValue": "110 °F",
+          "writeFlag": "dhwtanksetpointwrite"
+        }
+      ]
+    },
+    "analogSignalProperties": {
+      "title": "Analog / Signal Properties (Read-Only)",
+      "fields": [
+        {
+          "propertyKey": "firerate",
+          "payloadPropertyKey": "firerate",
+          "rawValue": 0,
+          "label": "Firing Rate",
+          "displayedValue": "0 %"
+        },
+        {
+          "propertyKey": "fan",
+          "payloadPropertyKey": "fan",
+          "rawValue": 33792,
+          "label": "Fan Speed",
+          "displayedValue": "Off"
+        },
+        {
+          "propertyKey": "flame",
+          "payloadPropertyKey": "flame",
+          "rawValue": 0,
+          "label": "Flame Signal",
+          "displayedValue": "0 V"
+        },
+        {
+          "propertyKey": "analogin",
+          "payloadPropertyKey": "analogin",
+          "rawValue": 33024,
+          "label": "Analog Input",
+          "displayedValue": "Open"
+        },
+        {
+          "propertyKey": "analogout",
+          "payloadPropertyKey": "analogout",
+          "rawValue": 40,
+          "label": "Analog Output",
+          "displayedValue": "4 mA"
+        }
+      ]
+    },
+    "stateStatusErrorProperties": {
+      "title": "State / Status / Error Properties (Read-Only)",
+      "fields": [
+        {
+          "propertyKey": "state",
+          "payloadPropertyKey": "state",
+          "rawValue": 5,
+          "label": "State",
+          "displayedValue": "Resolved from Boiler Settings"
+        },
+        {
+          "propertyKey": "status",
+          "payloadPropertyKey": "status",
+          "rawValue": 3,
+          "label": "Status",
+          "displayedValue": "Resolved from Boiler Settings"
+        },
+        {
+          "propertyKey": "errortype",
+          "payloadPropertyKey": "errortype",
+          "rawValue": 1,
+          "label": "Error Type",
+          "displayedValue": "1"
+        },
+        {
+          "propertyKey": "errorcode",
+          "payloadPropertyKey": "errorcode",
+          "rawValue": 10012,
+          "label": "Error Code",
+          "displayedValue": "Resolved from Boiler Settings"
+        }
+      ]
+    },
+    "colorLogic": {
+      "title": "Color Logic",
+      "rules": [
+        {
+          "errortype": 1,
+          "condition": "equals",
+          "color": "Red",
+          "cssClass": "hpk-lockout",
+          "backgroundColor": "#ff5b45"
+        },
+        {
+          "errortype": 2,
+          "condition": "greaterThanOrEqual",
+          "color": "Yellow",
+          "cssClass": "hpk-hold",
+          "backgroundColor": "#ffc104"
+        }
+      ]
+    }
+  }
+}

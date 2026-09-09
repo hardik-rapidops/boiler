@@ -1,0 +1,61 @@
+{
+  "name": "ErrorCode",
+  "replaceOnPUT": false,
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true,
+    "allowExtendedOperators": true
+  },
+  "properties": {
+    "errorDescription": {
+      "type": "string"
+    },
+    "errorKey": {
+      "type": "string",
+      "id": false,
+      "required": true,
+      "index": true
+    },
+    "errorTitle": {
+      "type": "string",
+      "required": true
+    },
+    "brand": {
+      "type": "string",
+      "default": "0"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "find"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "pkAdmin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "findByBrand"
+    }
+  ],
+  "methods": {}
+}

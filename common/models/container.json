@@ -1,0 +1,14 @@
+{
+  "name": "S3FilesContainer",
+  "replaceOnPUT": false,
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

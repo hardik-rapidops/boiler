@@ -1,0 +1,250 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Harsco DB and Appserver instances
+Parameters:
+  Env:
+    Type: String
+    Default: dev
+    AllowedValues:
+    - prd
+    - dev
+    Description: Environment
+  Version:
+    Type: String
+    Default: DEV_01
+    Description: Version to deploy
+    AllowedPattern : ".+"
+  BuildComment:
+    Type: String
+    Default: '-'
+    Description: Enter a comment for this build, if applicable
+  Ec2Image:
+    Description: Image - Amazon Linux 2 AMI (HVM), SSD Volume Type - ami-013be31976ca2c322
+    Type: String
+    Default: ami-013be31976ca2c322
+  InstanceType:
+    Type: String
+    Default: c5d.large
+    Description: Instance Type
+  NumInstances:
+    Type: Number
+    Default: 3
+    Description: How many instances to run. Minimum 3. It is advise to FIRST double this count when updating the stack and then reduce it after some time
+  PauseTime:
+    Type: String
+    Default: PT1H
+    Description: How long the instance needs to be up to sync replica set before it can be shut down by autoscaling for AS group update. For example, PT5M is 5 minutes.
+    AllowedPattern : ".+"
+Mappings:
+  '954493042210':
+    prd:
+      VpcId: vpc-2d25d857 #ba-dev
+      SubnetIds:
+        - subnet-da5df486
+      SubnetAzs:
+        - us-east-1a
+      SshKey: harscopk-prod-keypair
+      SecurityGroups:
+        - sg-024ac9738aa1e9640 # SSH Access
+        - sg-0f114ec275e479bd6 # prd-instance
+      AlbTargetGroupARNs:
+        - arn:aws:elasticloadbalancing:us-east-1:954493042210:targetgroup/prd-instance/71dc405accf242b1
+    dev:
+      VpcId: vpc-2d25d857 #ba-dev
+      SubnetIds:
+        - subnet-bc81fdf6
+      SubnetAzs:
+        - us-east-1d
+      SshKey: harscopk-keypair
+      SecurityGroups:
+        - sg-024ac9738aa1e9640 # SSH Access
+        - sg-075f75bc60a29475d # dev-instance
+      AlbTargetGroupARNs:
+        - arn:aws:elasticloadbalancing:us-east-1:954493042210:targetgroup/harsco-dev-alb-tg/fdcc22bc1549e37c
+Resources:
+  HarscoRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Sid: 1
+            Effect: Allow
+            Action:
+            - cloudformation:ListStackResources
+            - autoscaling:DescribeAutoScalingGroups
+            - ec2:DescribeInstances
+            - s3:ListAllMyBuckets
+            - cloudwatch:*
+            - s3:HeadBucket
+            - ses:Send*
+            Resource: "*"
+          - Sid: 2
+            Effect: Allow
+            Action:
+            - s3:ListBucket
+            - s3:GetObject
+            Resource:
+            - arn:aws:s3:::harsco-data/*
+            - arn:aws:s3:::harsco-data
+          - Sid: 3
+            Effect: Allow
+            Action: s3:*
+            Resource:
+            - arn:aws:s3:::harsco-data.vensi.com
+            - arn:aws:s3:::harsco-backups.vensi.com
+            - arn:aws:s3:::harsco-data.vensi.com/*
+            - arn:aws:s3:::harsco-backups.vensi.com/*
+          - Sid: 4
+            Effect: Allow
+            Action:
+            - s3:GetObject
+            Resource:
+            - arn:aws:s3:::harsco-deployment.vensi.com
+            - arn:aws:s3:::harsco-deployment.vensi.com/*
+          - Sid: 5
+            Effect: Allow
+            Action:
+            - cloudformation:DescribeStacks
+            - cloudformation:ListStackResources
+            Resource:
+            - arn:aws:cloudformation:*:*:stack/*/*"
+  HarscoServerGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones:
+        Fn::FindInMap:
+        - Ref: AWS::AccountId
+        - Ref: Env
+        - SubnetAzs
+      VPCZoneIdentifier:
+        Fn::FindInMap:
+        - Ref: AWS::AccountId
+        - Ref: Env
+        - SubnetIds
+      LaunchConfigurationName:
+        Ref: HarscoLaunchConfig
+      TargetGroupARNs:
+        Fn::FindInMap:
+          - Ref: AWS::AccountId
+          - Ref: Env
+          - AlbTargetGroupARNs
+      MinSize:
+        Ref: NumInstances
+      MaxSize:
+        Ref: NumInstances
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Join:
+          - ''
+          - - cf-
+            - Ref: AWS::StackName
+        PropagateAtLaunch: true
+    UpdatePolicy:
+        AutoScalingRollingUpdate:
+          MinInstancesInService: '1'
+          MaxBatchSize: '1'
+          PauseTime:
+            Ref: PauseTime
+  HarscoLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          services:
+            sysvinit:
+              cfn-hup:
+                enabled: 'true'
+                ensureRunning: 'true'
+                files:
+                - "/etc/cfn/cfn-hup.conf"
+                - "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+          files:
+            "/opt/vensi/cloud-bootstrap.sh":
+              content: !Sub |
+                #!/bin/bash
+                set -e; set -x
+                export ENVIRONMENT=${Env}
+                export VERSION=${Version}
+                export AWS_ACCOUNT_ID=${AWS::AccountId}
+                export AWS_STACK_NAME=${AWS::StackName}
+                echo ### DEPLOYING ${BuildComment} ####
+                deploypath=/home/ec2-user/harsco
+                rm -rf $deploypath/*
+                mkdir -p $deploypath
+                cd $deploypath/..
+                aws --region ${AWS::Region} s3 cp s3://harsco-deployment.vensi.com/$VERSION/harsco.tar.gz harsco.tar.gz
+                cd $deploypath
+                tar -zxf ../harsco.tar.gz && rm -f harsco.tar.gz
+                chown -R ec2-user:ec2-user $deploypath
+                sudo -u ec2-user -E ./setup_instance.sh 2>&1
+                echo Harsco Deployed on $(date)
+              mode: '000755'
+              owner: root
+              group: root
+            "/etc/cfn/hooks.d/cfn-auto-reloader.conf":
+              content: !Sub |
+                [cfn-auto-reloader-hook]
+                triggers=post.update
+                path=Resources.HarscoLaunchConfig.Metadata.AWS::CloudFormation::Init
+                action=/opt/aws/bin/cfn-init --stack ${AWS::StackName} --resource HarscoLaunchConfig  --region  ${AWS::Region}
+                runas=root
+              mode: '000755'
+              owner: root
+              group: root
+            "/etc/cfn/cfn-hup.conf":
+              content: !Sub |
+                [main]
+                stack=${AWS::StackName}
+                region=${AWS::Region}
+                interval=1
+              mode: '000755'
+              owner: root
+              group: root
+          commands:
+            init:
+              command: "./cloud-bootstrap.sh >> /tmp/bootstrap.log 2>&1"
+              cwd: "/opt/vensi"
+    Properties:
+      ImageId:
+        Ref: Ec2Image
+      InstanceType:
+        Ref: InstanceType
+      SecurityGroups:
+        Fn::FindInMap:
+        - Ref: AWS::AccountId
+        - Ref: Env
+        - SecurityGroups
+      KeyName:
+        Fn::FindInMap:
+        - Ref: AWS::AccountId
+        - Ref: Env
+        - SshKey
+      IamInstanceProfile:
+        Ref: HarscoInstanceProfile
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          sudo yum update -y --security
+          sudo yum install -y aws-cfn-bootstrap
+          sudo /opt/aws/bin/cfn-init -s ${AWS::StackId} -r HarscoLaunchConfig --region ${AWS::Region}
+          sudo service cfn-hup restart
+          sudo /sbin/chkconfig cfn-hup on
+  HarscoInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+      - Ref: HarscoRole

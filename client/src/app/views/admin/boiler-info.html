@@ -1,0 +1,108 @@
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Menu Button" hide-gt-sm ng-click="onClickMenu();">
+            <md-icon md-svg-icon="images/icons/menu.svg" aria-label="Menu Icon">
+            </md-icon>
+        </md-button>
+        <h2>{{model.title}}</h2>
+        <span flex></span>
+        <p class="Admin-Head" ng-show="vmr.user.roles[0].name == 'pkAdmin'" hide show-gt-md>Admin</p>
+    </div>
+</md-toolbar>
+<md-content class="p10">
+    <div layout="row" layout-wrap>
+    <div layout="row" flex="100" class="pl-10 pr-10">
+        <h4 class="blue-text">General Info</h4>
+    </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Name</label>
+                <input>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Description</label>
+                <input>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Sites</label>
+                <md-select name="favoriteColor" ng-model="favoriteColor">
+                    <md-option value="red">Fremd High School</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div layout="row" flex="100" class="pl-10 pr-10">
+        <h4 class="blue-text">Device info</h4>
+    </div>
+   
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Boiler Model</label>
+                <input>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Sola S/N</label>
+                <input>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Nuro S/N</label>
+                <input>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <md-input-container class="md-block margin-0" flex-gt-sm>
+                <label>Nuro SW Version</label>
+                <input>
+            </md-input-container>
+        </div>
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <div class="select-box">
+                <div layout="row" class="each-select">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Notify me when alerts are triggered</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <md-switch class="md-primary">
+                        </md-switch>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="row" flex="100" class="pl-10 pr-10">
+        <h4 class="blue-text">Settings</h4>
+    </div>
+    
+        <div flex="50" flex-xs="100" class="pl-10 pr-10">
+            <div class="select-box">
+                <div layout="row" class="each-select">
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Boiler Alerts</span>
+                    </div>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+                <div layout="row" class="each-select">
+                    
+                    <div flex="90" layout="column" layout-align="center start">
+                        <span>Advanced Boiler Settings</span>
+                    </div>
+                    </md-button>
+                    <div flex="10" layout="column" layout-align="center end" class="blue-text">
+                        <ng-md-icon icon="keyboard_arrow_right" style="fill:#d5d5d5"></ng-md-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="row" flex="100" layout-align="end center">
+        <md-button class="md-raised md-primary">Save</md-button>
+    </div>
+    </div>
+  </md-content>

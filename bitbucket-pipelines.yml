@@ -1,0 +1,51 @@
+image:
+  name: vensi/mobileplatform:1
+  username: $DOCKER_HUB_USERNAME
+  password: $DOCKER_HUB_PASSWORD
+  email: $DOCKER_HUB_EMAIL
+pipelines:
+  custom:
+    phone-apps:
+      - step:
+          name: Publish Dev App to Fabric
+          script:
+            - cd client
+            - mkdir -p www
+            - touch www/index.html
+            # - sed -i 's#<content src=.*/#<content src="https://dev.nuroconnect.com/android/index.html"/>#g' config.xml
+            # - ./build_android.sh
+            # - sed -i 's#<content src=.*/#<content src="https://dev.nuroconnect.com/ios/index.html"/>#g' config.xml
+            # - ./build_ios.sh 
+          artifacts:
+            - client/**
+      - step:
+          name: Publish Prod App to Fabric
+          trigger: manual
+          script:
+            - cd client
+            - mkdir -p www
+            - touch www/index.html
+            # - sed -i 's#<content src=.*/#<content src="https://app.nuroconnect.com/android/index.html"/>#g' config.xml
+            # - ./build_android.sh
+            #  - sed -i 's#<content src=.*/#<content src="https://app.nuroconnect.com/ios/index.html"/>#g' config.xml
+            #  - ./build_ios.sh --ssh-server adershjames@52.87.62.208
+          artifacts:
+            - client/**
+    services:
+    - step:
+        name: Build and Upload DEV Service
+        script:
+          - ./build.sh
+          - echo $(date +%Y%m%d) > build-number.txt
+          - aws s3 cp harsco.tar.gz s3://harsco-deployment.vensi.com/dev/$(cat build-number.txt)/harsco.tar.gz
+        artifacts:
+          - build-number.txt
+          - harsco.tar.gz
+    - step:
+        name: Upload build to Production
+        trigger: manual
+        script:
+          - aws s3 cp harsco.tar.gz s3://harsco-deployment.vensi.com/prd/$(cat build-number.txt)/harsco.tar.gz
+        artifacts:
+          - build-number.txt
+          - harsco.tar.gz

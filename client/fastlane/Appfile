@@ -1,0 +1,11 @@
+for_lane :beta do
+  app_identifier "com.vensi.harsco-dev"
+  apple_id "developer@vensi.com"
+  team_id "84KLUUGWB3"
+end
+
+for_lane :appstore do
+  app_identifier "com.vensi.harsco"
+  apple_id "developer@vensi.com"
+  team_id "W5J9WEM5K6"
+end

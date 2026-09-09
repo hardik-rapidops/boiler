@@ -1,0 +1,27 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Harsco
+  x-ibm-name: harsco
+host: $(catalog.host)
+basePath: /
+paths: {}
+securityDefinitions:
+  clientID:
+    description: ''
+    in: header
+    name: X-IBM-Client-Id
+    type: apiKey
+security:
+  - clientID: []
+x-ibm-configuration:
+  assembly:
+    execute:
+      - invoke:
+          target-url: $(target-url)$(request.path)
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json

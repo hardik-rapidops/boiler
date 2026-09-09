@@ -1,0 +1,13 @@
+node_modules/
+reports/
+test-results/
+playwright-report/
+playwright/.auth/
+src/runtime/runtime-data.json
+src/runtime/runtime-data.json.lock
+.env.dev
+.env.prod
+*.log
+logs/
+/test-data/boiler-details.docx
+test-cases/
